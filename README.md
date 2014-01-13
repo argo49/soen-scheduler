@@ -10,16 +10,16 @@ Team Name: TBD
 
 Team Members
 ==============
-- Tyler Argo (Front End Implementation)
-- Buruc Asrin
-- Ammar Baali (Front End Implementation)
-- Samer El-Achkar (Tester)
-- Evangelia Kontis (Back End Implementation)
-- Georgi Lachov (Documentation Specialist)
-- Kristina Lachova (Back End Implementation)
-- Corey Lee (Back End Implementation)
-- Chantale Robillard (Documentation Specialist, Team Leader)
-- Mathieu St-Louis (Front End Implementation)
+- Tyler Argo (Front End Implementation) @argo49
+- Buruc Asrin (Front End Implementation) @basrin
+- Ammar Baali (Front End Implementation) @AmmarB341
+- Samer El-Achkar (Tester) @samerela
+- Evangelia Kontis (Back End Implementation)  @red-areios
+- Georgi Lachov (Documentation Specialist) @glachov
+- Kristina Lachova (Back End Implementation) @klachov
+- Corey Lee (Back End Implementation) @coolhatharry
+- Chantale Robillard (Documentation Specialist, Team Leader) @BloZ-C
+- Mathieu St-Louis (Front End Implementation) @niofire
 - Mather Warsame (Tester)
 
 
