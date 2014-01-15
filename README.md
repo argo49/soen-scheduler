@@ -20,6 +20,6 @@ Team Members
 - Corey Lee (Back End Implementation) @coolhatharry
 - Chantale Robillard (Documentation Specialist, Team Leader) @BloZ-C
 - Mathieu St-Louis (Front End Implementation) @niofire
-- Mather Warsame (Tester)
+- Mather Warsame (Tester) @MWarsame
 
 
