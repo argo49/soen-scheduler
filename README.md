@@ -5,7 +5,7 @@ This is a group project for Concordia's SOEN 341 course "Software Process".
 - A guide on how to use this app can be found in this repository's GitHub Wiki page.
 - Current tasks, issues and information items can be found in the "issues" section of this repository.
 
-Team Name: TBD
+Team Name: ARGONAUTS
 ==============
 
 Team Members
