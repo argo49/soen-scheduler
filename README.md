@@ -18,6 +18,7 @@ Team Members
 - Georgi Lachov (Documentation Specialist) @glachov
 - Kristina Lachova (Back End Implementation) @klachov
 - Corey Lee (Back End Implementation) @coolhatharry
+- Gaston Matos (Tester) @GastonMatos
 - Chantale Robillard (Documentation Specialist, Team Leader) @BloZ-C
 - Mathieu St-Louis (Front End Implementation) @niofire
 - Mather Warsame (Tester) @MWarsame
