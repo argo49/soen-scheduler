@@ -8,7 +8,7 @@ This is a group project for Concordia's SOEN 341 course "Software Process".
 Team Name: ARGONAUTS
 ==============
  
-Team Members
+Team Members 
 ==============
 - Tyler Argo (Front End Implementation) @argo49
 - Buruc Asrin (Front End Implementation) @basrin
