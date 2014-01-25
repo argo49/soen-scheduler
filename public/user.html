@@ -1,0 +1,82 @@
+<!-- DOCTYPE html-->
+<html>
+	<head>
+		<title>Concordia Schedule Maker</title>
+		<link rel="stylesheet" type="text/css" href="css/screen.css"/>
+		<link rel="stylesheet" type="text/css" href="css/semantic.css"/>
+		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="lib/semantic.min.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+	</head>
+	<body>
+		<!-- Sidebar -->
+		<div class="ui very wide sidebar">
+			<h3 class="ui header center">
+				Your Courses
+			</h3>
+			<div class="center fluid">for</div>
+			<div class="center semester">
+				<div class="ui inline dropdown">
+					<div class="text">Summer/1</div>
+				    <i class="dropdown icon"></i>
+				    <div class="menu">
+				        <div class="item active" data-text="Summer/1">Summer/1</div>
+				        <div class="item" data-text="Summer/2">Summer/2</div>
+				        <div class="item" data-text="Fall/3">Fall/3</div>
+				        <div class="item" data-text="Winter/4">Winter/4</div>
+				    </div>
+				</div>
+				<div class="ui inline dropdown">
+					<div class="text">2014</div>
+				    <i class="dropdown icon"></i>
+				    <div class="menu">
+				        <div class="item active" data-text="2014 ">2014</div>
+				        <div class="item" data-text="2015 ">2015</div>
+ 				        <div class="item" data-text="2016 ">2016</div>
+				    </div>
+				</div>
+			</div>
+			<div id="courseList">
+			</div>
+			<div class="ui small fluid ui-widget icon input">
+			  <input id="addInput" type="text" placeholder="Add a course...">
+			  <i class="inverted add icon"></i>
+			</div>
+			<h3 class="ui center header fluid">
+				Generate
+				<i class="forward mail icon"></i>
+
+			</h3>
+
+			<!-- Circular reveal thing
+			<div class="ui circular big rotate reveal image logo">
+				<img class="visible content" src="images/argonauts.png"/>
+				<div class="hidden content">
+					<div class="ui circular segment">
+					  <p style="color:#000;">
+					    Meet The Team!
+					  </p>
+					</div>			
+				</div>
+			</div>
+			-->
+
+		</div>
+
+		<!-- Sidebar tag for sidebar reveal -->
+		<div class="ui black right attached button tag">
+			<i class="icon add layout"></i>
+			<span class="text" style="display: none;">Add A Course!</span>
+		</div>
+
+		<!-- Main content -->
+		<div class="main container">
+			<h1 class="ui center header">Concordia Schedule Generator</h1>
+			<div class="ui horizontal icon divider">
+			  <i class="circular calendar icon"></i>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,122 @@
+* {
+	font-family: "Gill Sans Light";
+}
+
+body {
+	margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal !important;
+	text-transform: uppercase;
+}
+
+.sidebar {
+	width: 25%;
+	background-color: #333;
+	color: #fff;
+}
+
+.container {
+	width: 1100px;
+	margin: auto;
+}
+
+/* The thing that expands the sidebar*/
+.tag {
+	position: fixed;
+	top: 100px;
+	border-radius: 0 !important;
+	width: 2.7em;
+}
+
+/* out logo in the sidebar */
+.sidebar .logo {
+	width: 33%;
+	margin: auto;
+}
+
+/* sidebar text input*/
+.sidebar input[type="text"] {
+	background-color: #444 !important;
+	color: #fff !important;
+}
+
+/* Each course in sidebar list */
+.sidebar .course {
+	height: 45px;
+	line-height: 45px;
+	vertical-align: middle;
+	border-bottom: 1px solid black;
+	background-color: #444;
+}
+
+.sidebar h3 {
+	margin: 25px 0 0 0 !important;
+}
+
+/* Color picker circles in menu */
+.color {
+	width: 30px;
+	height: 30px;
+	float: left;
+	margin: 5px 15px;
+	border-radius: 15px;
+}
+
+.course .removeCourse {
+	float: right;
+	border-radius: 0 !important;
+	height: 100%;
+	width: 2.3em;
+	padding: 0.55em 0.8em 0.8em 0.55em !important;
+	background-color: #333 !important;
+	color: #aaa !important;
+}
+
+.course .removeCourse:hover{
+	color: #fff !important;
+}
+
+.center {
+	text-align: center;
+}
+
+.semester {
+	margin-bottom: 25px;
+}
+
+.forgotPass {
+	width: 500px;
+	margin: auto;
+	color: #aaa;
+}
+
+.login {
+	position: relative;
+	top: 15%;
+}
+
+.ui.form.segment {
+	box-shadow: 1px 1px 5px 2px #ddd0d0;
+}
+
+/* Fixing a bug with semantic sidebars, jquery-ui and z-indexing */
+ul.ui-autocomplete {
+	display: block;
+	z-index: 1000;
+	width: 250px;
+}
+
+.button.noBorder {
+	border-radius: 0px !important;
+}
+
+@font-face {
+	font-family: "Gill Sans Light";
+    src: url('../fonts/gillsansmtpro-light-webfont.otf');
+    src: local('../fonts/gillsansmtpro-light-webfont'), 
+         local('../fonts/gillsansmtpro-light-webfont'), 
+         url('../fonts/gillsansmtpro-light-webfont.ttf') format('truetype'),
+         url('../fonts/gillsansmtpro-light-webfont.svg#font') format('svg');
+}

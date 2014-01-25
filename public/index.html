@@ -1,0 +1,46 @@
+<!-- DOCTYPE html-->
+<html>
+	<head>
+		<title>Concordia Schedule Maker</title>
+		<link rel="stylesheet" type="text/css" href="css/screen.css"/>
+		<link rel="stylesheet" type="text/css" href="css/semantic.css"/>
+		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="lib/semantic.min.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+	</head>
+	<body>
+		<!-- Main content -->
+		<div class="main container login">
+			<h1 class="ui center header">Concordia Schedule Generator</h1>
+			<div class="ui horizontal icon divider">
+			  <i class="circular calendar icon"></i>
+			</div>
+			<form action="https://my.concordia.ca/psp/portprod/?cmd=login&amp;languageCd=ENG">
+			<div class="ui form segment" style="width:500px; margin:auto;">
+	  		    <div class="field">
+			        <div class="ui left labeled icon input">
+			            <input type="text" placeholder="Username">
+			            <i class="user icon"></i>
+			        </div>
+			    </div>
+			    <div class="field">
+			      <div class="ui left labeled icon input">
+			            <input type="password" placeholder="Password">
+			            <i class="lock icon"></i>
+			        </div>
+			    </div>
+			  <div class="ui error message">
+			    <div class="header">We noticed some issues</div>
+			  </div>
+			  <div class="center">
+				  <div class="ui black submit button noBorder">Login</div>
+	  			  <div class="ui black submit button noBorder">Signup!</div>
+  			  </div>
+			</div>
+			</form>
+			<div class="forgotPass">Forgot your password?</div>
+		</div>
+	</body>
+</html>
