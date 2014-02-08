@@ -4,6 +4,7 @@
 
 body {
 	margin: 0;
+	background-color: #f8f8f8;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -18,7 +19,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .container {
-	width: 1100px;
+	width: 100%;
 	margin: auto;
 }
 
@@ -34,6 +35,14 @@ h1, h2, h3, h4, h5, h6 {
 .sidebar .logo {
 	width: 33%;
 	margin: auto;
+}
+
+.logo {
+	float: right;
+	position: relative;
+	top: 100%;
+	margin-top: -580px;
+	height: 200px;
 }
 
 /* sidebar text input*/
@@ -88,7 +97,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .forgotPass {
 	width: 500px;
+	display: block;
 	margin: auto;
+	margin-top: 15px;
 	color: #aaa;
 }
 
@@ -119,4 +130,17 @@ ul.ui-autocomplete {
          local('../fonts/gillsansmtpro-light-webfont'), 
          url('../fonts/gillsansmtpro-light-webfont.ttf') format('truetype'),
          url('../fonts/gillsansmtpro-light-webfont.svg#font') format('svg');
+}
+
+
+/* FACEBOOK STYLES*/
+
+/* Hack for facebook login button*/
+.fb_iframe_widget {
+	display: inline !important;
+}
+
+.fb_or {
+	display: inline-block;
+	margin: 0 10px;
 }

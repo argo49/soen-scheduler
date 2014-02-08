@@ -9,16 +9,20 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="lib/semantic.min.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
 	</head>
 	<body>
+
+		<script type="text/javascript" src="js/fblogin.js"></script>
+
 		<!-- Main content -->
 		<div class="main container login">
 			<h1 class="ui center header">Concordia Schedule Generator</h1>
 			<div class="ui horizontal icon divider">
 			  <i class="circular calendar icon"></i>
 			</div>
-			<form action="https://my.concordia.ca/psp/portprod/?cmd=login&amp;languageCd=ENG">
 			<div class="ui form segment" style="width:500px; margin:auto;">
+				<div class="ui error message"><div class="header">Woops!</div></div>
 	  		    <div class="field">
 			        <div class="ui left labeled icon input">
 			            <input type="text" placeholder="Username">
@@ -31,16 +35,19 @@
 			            <i class="lock icon"></i>
 			        </div>
 			    </div>
-			  <div class="ui error message">
-			    <div class="header">We noticed some issues</div>
-			  </div>
 			  <div class="center">
 				  <div class="ui black submit button noBorder">Login</div>
 	  			  <div class="ui black submit button noBorder">Signup!</div>
+	  			  <div class="fb_or">OR</div>
+	  			  <div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
   			  </div>
+  			  <a class="forgotPass" href="">Forgot your password?</a>
 			</div>
-			</form>
-			<div class="forgotPass">Forgot your password?</div>
+		</div>
+		<img class="logo" src="images/logo2.png"/>
+		<div class="ui bottom inverted sidebar menu active">
+			<div class="header item"><a href="http://concordia.ca">Concordia University</a></div>
+			<div class="item">Team</div>
 		</div>
 	</body>
 </html>
