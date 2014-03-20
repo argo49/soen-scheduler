@@ -4,50 +4,82 @@
 		<title>Concordia Schedule Maker</title>
 		<link rel="stylesheet" type="text/css" href="css/screen.css"/>
 		<link rel="stylesheet" type="text/css" href="css/semantic.css"/>
-		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="lib/semantic.min.js"></script>
-		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript" src="js/login.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
 
-		<script type="text/javascript" src="js/fblogin.js"></script>
+		<div id="fb-root"></div>
 
-		<!-- Main content -->
-		<div class="main container login">
-			<h1 class="ui center header">Concordia Schedule Generator</h1>
-			<div class="ui horizontal icon divider">
-			  <i class="circular calendar icon"></i>
+		<script type="text/javascript">
+			//Facebook javascript login nonsense
+			function testAPI(){console.log("Welcome!  Fetching your information.... "),FB.api("/me",function(a){console.log("Good to see you, "+a.name+".")})}window.fbAsyncInit=function(){FB.init({appId:"665040556873147",status:!0,cookie:!0,xfbml:!0}),FB.Event.subscribe("auth.authResponseChange",function(a){"connected"===a.status?testAPI():"not_authorized"===a.status?FB.login():FB.login()})},function(a){var b,c="facebook-jssdk",d=a.getElementsByTagName("script")[0];a.getElementById(c)||(b=a.createElement("script"),b.id=c,b.async=!0,b.src="http://connect.facebook.net/en_US/all.js",d.parentNode.insertBefore(b,d))}(document);
+		</script>
+
+		<div class="container">
+
+			<div class="row clearfix">
+				<h1 class="ui header">Concordia Schedule Generator</h1>
+				<div class="ui horizontal icon divider">
+			  		<i class="circular calendar icon"></i>
+			  	</div>
 			</div>
-			<div class="ui form segment" style="width:500px; margin:auto;">
-				<div class="ui error message"><div class="header">Woops!</div></div>
-	  		    <div class="field">
-			        <div class="ui left labeled icon input">
-			            <input type="text" placeholder="Username">
-			            <i class="user icon"></i>
-			        </div>
-			    </div>
-			    <div class="field">
-			      <div class="ui left labeled icon input">
-			            <input type="password" placeholder="Password">
-			            <i class="lock icon"></i>
-			        </div>
-			    </div>
-			  <div class="center">
-				  <div class="ui black submit button noBorder">Login</div>
-	  			  <div class="ui black submit button noBorder">Signup!</div>
-	  			  <div class="fb_or">OR</div>
-	  			  <div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
-  			  </div>
-  			  <a class="forgotPass" href="">Forgot your password?</a>
+
+			<div class="row clearfix">
+				<div class="column two-thirds center">
+					<div class="ui form segment">
+						<div class="ui error message"><div class="header">Woops!</div></div>
+			  		    <div class="field">
+					        <div class="ui left labeled icon input">
+					            <input type="text" placeholder="Email">
+					            <i class="mail icon"></i>
+					        </div>
+					    </div>
+					    <div class="field">
+					      <div class="ui left labeled icon input">
+					            <input type="password" placeholder="Password">
+					            <i class="lock icon"></i>
+					        </div>
+					    </div>
+
+					    <div class="column fourth">
+				  			<div class="ui black submit button noBorder">Login</div>
+					    </div>
+					    <div class="column fourth">
+					    	<div class="ui black submit button noBorder">Signup!</div>
+					    </div>
+					    <div class="column fourth">
+					    	<h2>or</h2>
+					    </div>
+					    <div class="column fourth">
+					    	<div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
+					    </div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<img class="logo" src="images/logo2.png"/>
-		<div class="ui bottom inverted sidebar menu active">
-			<div class="header item"><a href="http://concordia.ca">Concordia University</a></div>
-			<div class="item">Team</div>
+
+			<div class="row clearfix">
+				<div class="column third">
+					<img class="promo circular ui image" src="images/calendar.png">
+					<p class="image-caption">Make all your friends jealous of how awesome you are when you show them your schedule!</P>
+				</div>
+				<div class="column third">
+					<img class="promo circular ui image" src="images/cloud.jpg">
+					<p class="image-caption">Store your schedule in the cloud 'cause that's what all the cool kids are doing.</P>
+				</div>
+				<div class="column third">
+					<img class="promo circular ui image" src="images/logo_promo.png">
+					<p class="image-caption">We guarantee you'll be satisfied or your money back! Oh, that's right, it's FREE!</P>
+				</div>
+			</div>
+
+			<div class="row clearfix footer">
+				<div class="column full">
+					<p>Made with &hearts; by the Argonauts team.</p>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

@@ -1,0 +1,118 @@
+<!-- DOCTYPE html-->
+<html>
+	<head>
+		<title>My Profile</title>
+		<link rel="stylesheet" type="text/css" href="css/screen.css"/>
+		<link rel="stylesheet" type="text/css" href="css/semantic.css"/>
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="lib/semantic.min.js"></script>
+		<script type="text/javascript" src="js/profile.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<div id="fb-root"></div>
+		<script type="text/javascript">
+			//Facebook javascript login nonsense
+			function testAPI(){console.log("Welcome!  Fetching your information.... "),FB.api("/me",function(a){console.log("Good to see you, "+a.name+".")})}window.fbAsyncInit=function(){FB.init({appId:"665040556873147",status:!0,cookie:!0,xfbml:!0}),FB.Event.subscribe("auth.authResponseChange",function(a){"connected"===a.status?testAPI():"not_authorized"===a.status?FB.login():FB.login()})},function(a){var b,c="facebook-jssdk",d=a.getElementsByTagName("script")[0];a.getElementById(c)||(b=a.createElement("script"),b.id=c,b.async=!0,b.src="http://connect.facebook.net/en_US/all.js",d.parentNode.insertBefore(b,d))}(document);
+		</script>
+
+		<div class="container">
+
+			<div class="row clearfix profileHeader">
+				<div class="column third">
+					<div class="ui fade reveal center">
+					    <img class="visible content" src="images/profile/default.png">
+					    <img class="hidden content" src="images/profile/edit.png">
+					</div>
+				</div>
+				<div class="column two-thirds">
+					<h1 class="profile">Billy Bob Jones</h1>
+				</div>
+			</div>
+
+			<div class="row clearfix">
+				<div class="ui horizontal icon divider">
+  					<i class="circular pencil icon link" title="Edit Profile"></i>
+				</div>
+			</div>
+
+			<div class="row clearfix attribute">
+				<div class="column half">
+					<span class="attribute">Student ID</span>
+				</div>
+				<div class="column half">
+					<div>6666666</div>
+				</div>
+			</div>
+			<div class="row clearfix attribute">
+				<div class="column half">
+					<span class="attribute">Email</span>
+				</div>
+				<div class="column half">
+					<div>bobb@concordia.ca</div>
+				</div>
+			</div>
+			<div class="row clearfix attribute">
+				<div class="column half">
+					<span class="attribute">Phone Number</span>
+				</div>
+				<div class="column half">
+					<div>(514) 555-2342</div>
+				</div>
+			</div>
+			<div class="row clearfix attribute">
+				<div class="column half">
+					<span class="attribute">Program</span>
+				</div>
+				<div class="column half">
+					<div>Software Engineering</div>
+				</div>
+			</div>
+			<div class="row clearfix attribute">
+				<div class="column half">
+					<span class="attribute">Year of Study</span>
+				</div>
+				<div class="column half">
+					<div>3<sup>rd</sup></div>
+				</div>
+			</div>
+
+			<div class="row clearfix">
+				<div class="column full">
+					<div class="ui accordion">
+					    <div class="title">
+					        <i class="dropdown icon"></i>
+					        Courses Already Completed:
+					    </div>
+					    <div class="content">
+					        <div class="ui divided list">
+								<div class="item">
+									<a class="header">SOEN 341</a>
+									<div class="description">Software Process</div>
+								</div>
+								<div class="item">
+									<a class="header">COMP 346</a>
+									<div class="description">Operating Systems</div>
+								</div>
+								<div class="item">
+				  					<i class="plus icon link" title="EDIT"></i>
+								</div>
+					    	</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div> <!-- End Of Container -->
+
+		<div class="ui page dimmer">
+			<div class="content">
+				<div class="center">Hello</div>
+			</div>
+		</div>
+
+	</body>
+</html>
