@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+
+	<script type="text/javascript">
+	
+
+
+		//console.log('hello world!');
+
+		var socket = io.connect();
+
+		socket.emit('SomeEvent', thanksServer);//sends some event to the server
+
+		//event listener for when the server sends it back, called: ReceivingStuff
+		socket.on('ReceivingStuff', function(dataReceived){  
+
+			console.log(dataReceived);
+
+		});
+	
+
+
+	</script>
+</body>
+</html>
