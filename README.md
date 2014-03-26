@@ -22,6 +22,3 @@ Team Members
 - Chantale Robillard (Documentation Specialist, Team Leader) @BloZ-C
 - Mathieu St-Louis (Front End Implementation) @niofire
 - Mather Warsame (Tester) @MWarsame
-
-testing campfire
-
