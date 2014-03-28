@@ -9,6 +9,8 @@
 }
 
 *, *:before, *:after {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 
@@ -22,6 +24,10 @@ h1, h2, h3, .button {
 	font-weight: normal !important; /* overiding semantic's nonsense*/
 	text-align: center;
 	text-transform: uppercase;
+}
+
+h3 { 
+	margin : 0 !important;
 }
 
 img {
@@ -41,11 +47,17 @@ li {
 	padding: 0.2rem 0;
 }
 
+a > i {
+	color: rgba(0, 0, 0, 0.8) !important;
+	text-decoration: none !important;
+}
+
 /*main container that should hold all the elements of the screen on each page*/
 .container {
 	margin: 0 auto;
 	max-width: 48rem;
 	width: 100%; /* we're going for a full spread when it downsizes to mobile*/
+	position: relative;
 }
 
 /*******************\
@@ -56,6 +68,7 @@ li {
 .image-caption {
 	text-align: center;
 	color: #777;
+	font-size: 160%;
 }
 
 img.promo {
@@ -75,7 +88,6 @@ img.promo {
 
 .button {
 	border-radius: 0 !important;
-	padding-top: 0.3rem !important;
 }
 
 /* Edit profile pic */
@@ -104,10 +116,98 @@ span.attribute, .header {
 	width: 100% !important;
 }
 
-.ui-autocomplete {
-	z-index: 1000 !important;
+.ui.label {
+	min-height: 1.4rem;
+}
+
+.center {
+	text-align: center;
+}
+
+input {
+	border-radius: 0 !important;
+}
+
+input + i {
+	border-radius: 0 !important;
+}
+
+
+/********************\
+|    TABLE STYLES    |
+\********************/
+
+table {
+	border-collapse: collapse;
+	width: 95%;
+	display: block;
+	margin: auto;
+	font-size: 0.8em;
+}
+
+table.schedule *{
+	font-family: 'Verdana', 'Arial' sans-serif;
+}
+
+/* Table Header Styles*/
+table.schedule thead td {
+	text-transform: uppercase;
+	font-weight: bold;
+	background-color: hsl(214, 31%, 87%);
+}
+
+table.schedule td {
+	border: 2px solid #888 !important;
+}
+
+.row.schedule .icons {
+	width: 95%;
+	display: block;
+	margin: auto;
+	margin-bottom: 0.3rem;
+	position: relative;
+}
+
+.row.schedule .icons h3 {
+	position: absolute;
+	top : 0.3rem;
+	padding-left: 5rem;
+}
+
+.row.schedule .save.icon:hover {
+	background-color: #C3FFD2;
+}
+
+.row.schedule .close.icon:hover {
+	background-color: #d95c5c;
+}
+
+.row.schedule .icons h3.semester {
+	position: absolute;
+	right: 0;
+	top: 0.3rem;
+}
+
+/*************************\
+|    PC Sidebar Styles    | Cause semantic doesnt have inverted versions of some things
+\*************************/
+
+.pc.sidebar .button {
 	display: block !important;
 }
+
+.pc.sidebar .accordion {
+	background-color: inherit;
+}
+
+.pc.sidebar .title {
+	color: #fff !important;
+}
+
+.pc.sidebar .dropdown .item,  .pc.sidebar .inline.dropdown .active.item{
+	color: #000 !important;
+}
+
 
 /*******************************************************************************************\
 |										SMALL SCREEN STYLES 						 	 	|
@@ -115,7 +215,7 @@ span.attribute, .header {
 \*******************************************************************************************/
 
 p {
-	font-size: 160%;
+	font-size: 130%;
 	padding: 0 1rem;
 }
 
@@ -145,11 +245,21 @@ div.attribute {
 
 /* Phone menu styles */
 
-.phone.divider {
+.white.action.phone.divider {
 	position: fixed !important;
 	width: 100%;
-	margin: 0 !important;
+	margin: 0 auto !important;
 	top: 0.5rem !important;
+	z-index: 1000;
+}
+
+.white.action.phone.divider .icon{
+	background-color: #fff;
+	opacity: 1;
+}
+
+.ui.inverted.action.divider {
+
 }
 
 /* I would rather not have to use this */
@@ -157,16 +267,83 @@ div.attribute {
 	/*overflow: scroll;*/
 }
 
+/* Because divider is fixed, need some spacing */
+.row.phone.menu.buffer {
+	height: 4rem;
+}
+
+.row.phone.containing.menu {
+	max-height: 80%;
+	overflow-y: scroll;
+}
+
+.ui.basic.modal {
+	height: 100%;
+}
+
+.prompt .column{
+	text-align: center;
+	background-color: #eee;
+	margin: 1rem;
+	padding: 1rem 0;
+}
+
+.accordion {
+	padding: 0 !important;
+	border-radius: 0 !important;
+}
+
+.prompt p:before {
+	content: "Tap ";
+}
+
+.pc {
+	visibility: hidden;
+}
+
+.topNav {
+	position: absolute;
+	text-decoration: none;
+	top: 0.65rem;
+	right: 0.25rem;
+}
+
+.topNav span {
+	display: none;
+}
+
+.completed.accordion .item .close.icon {
+	float: left;
+	color: red;
+	margin-right: 0px;
+}
+
+.completed.accordion .description{
+	text-indent: 1.2rem;
+}
+
+.icon.hidden { 
+	visibility: hidden;
+}
+
+
 body {
 	height: 200%;
 }
 
+.dummy {
+	height: 0;
+	width: 0;
+	padding: 0;
+	margin: 0;
+}
 
 /***************************\
 |	MEDIUM SCREEN STYLES 	|
 \***************************/
+/* Make this smaller once you're done debugging ok? ok great thanks.*/
 
-@media (min-width: 48rem) { 
+@media (min-width: 40rem) { 
 	.column {
 		float: left;
 		padding: 0rem 1rem;
@@ -236,6 +413,31 @@ body {
 		visibility: hidden;
 	}
 
+
+	.prompt p:before {
+		content: "Click ";
+	}
+
+	.prompt {
+		margin: 0;
+		padding: 0;
+		width: 96%;
+	}
+
+	.topNav span {
+		display: inline;
+	}
+
+	.dummy {
+		width: 1px;
+	}
+
+	.pc {
+		visibility: visible;
+	}
+
+
+
 }
 
 /***************************\
@@ -245,7 +447,7 @@ body {
 @media (min-width: 64rem) {
 	html {
 		/* Base font size, 120% browser default, font sizes should use EM or REM units */
-		font-size: 120%; 
+		/*font-size: 120%;*/ 
 	}
 }
 

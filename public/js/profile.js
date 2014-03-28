@@ -1,3 +1,7 @@
+global = {
+
+}
+
 // Popup for edit button
 $(document).ready(function() {
 	// State for editing fields
@@ -5,10 +9,16 @@ $(document).ready(function() {
 
 	// Edit fields icon
 	var editPencil = $('i.circular.pencil');
+	var removeCourseIcon = $('.close.icon');
+	var addCourse = $('.plus.icon');
+
+
 
 	// Turn div into input for editing and pencil to check
 	editPencil.on('click', function() {
 		var icon = $(this);
+		removeCourseIcon = $('.close.icon');
+
 		
 		if (editMode) {
 			// Show that the data is being saved
@@ -32,6 +42,11 @@ $(document).ready(function() {
 				// can happen, but it all gets reset in the end anyway so its not a big deal	
 			}, 1200);
 
+			// Hide the delete course x's
+			removeCourseIcon.addClass('hidden');
+
+			addCourse.
+
 			// Set edit mode to false
 			editMode = false;
 		} else {
@@ -41,6 +56,9 @@ $(document).ready(function() {
 
 			// Set edit mode to true
 			editMode = true;	
+
+			// Show the delete course x's
+			removeCourseIcon.removeClass('hidden');
 
 			// Grab the attribute values and put them into inputs
 			var fields = $('.attribute .column div');
@@ -55,7 +73,6 @@ $(document).ready(function() {
 		}		
 	}); // End pencil click
 
-	var addCourse = $('.plus.icon');
 
 	addCourse.on('click', function(){
 		var plus = $(this);
@@ -71,10 +88,13 @@ $(document).ready(function() {
 			var button = $(this);
 			// check if it's an actual class and retrive the course name
 			var container = input;
+
+			var shouldBeHidden = editMode? "" : "hidden";
 			
+			container.append($('<i/>').addClass('ui ' + shouldBeHidden + ' close icon').on('click', removeCourse));
 			container.append($('<a/>').addClass('header').text(container.find('input').val()));
 			container.append($('<div/>').addClass('description').text('This is Totally a Class 101'));
-			container.children().remove(':not(.header,.description)');
+			container.children().remove(':not(.header,.description,.icon)');
 
 		});
 
@@ -83,8 +103,15 @@ $(document).ready(function() {
 
 	});
 
+	removeCourseIcon.on('click', removeCourse);
+
 	// Set up accordion
 	$('.ui.accordion').accordion();
 
-	
+	function removeCourse() {
+		var icon = $(this);
+		if (editMode) {
+			icon.closest('.item').remove();
+		}
+	}	
 });

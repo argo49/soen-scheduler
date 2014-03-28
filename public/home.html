@@ -6,7 +6,7 @@
 		<link rel="stylesheet" type="text/css" href="css/screen.css"/>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script type="text/javascript" src="lib/semantic.min.js"></script>
-		<script type="text/javascript" src="js/home.js"></script>
+		<script type="text/javascript" src="js/menu.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
@@ -18,24 +18,268 @@
 			function testAPI(){console.log("Welcome!  Fetching your information.... "),FB.api("/me",function(a){console.log("Good to see you, "+a.name+".")})}window.fbAsyncInit=function(){FB.init({appId:"665040556873147",status:!0,cookie:!0,xfbml:!0}),FB.Event.subscribe("auth.authResponseChange",function(a){"connected"===a.status?testAPI():"not_authorized"===a.status?FB.login():FB.login()})},function(a){var b,c="facebook-jssdk",d=a.getElementsByTagName("script")[0];a.getElementById(c)||(b=a.createElement("script"),b.id=c,b.async=!0,b.src="http://connect.facebook.net/en_US/all.js",d.parentNode.insertBefore(b,d))}(document);
 		</script>
 
-		<div class="ui horizontal icon divider phone">
+		<div class="ui white horizontal action icon divider">
 	  		<i class="circular calendar icon link"></i>
 	  	</div>
 
 		<div class="container">
-
-		</div>
-
-
-		<div class="ui basic modal">
-			<i class="close icon black"></i>
-			<div class="row clearfix">
+			<div class="row clearfix menu buffer">
 				<div class="column full">
-					<h1>asdasdasd</h1>
+
 				</div>
 			</div>
 
-		</div>
+			<div class="row clearfix prompt">
+				<div class="column full">
+					<h2>you haven't selected any courses yet!</h2>
+					<p>the calendar icon to get started</p>
+				</div>
+			</div>
 
+			<div class="row clearfix">
+				<div class="column full">
+					<h2>______ schedules generated</h2>
+				</div>
+			</div>
+
+			<div class="row clearfix schedule">
+				<div class="column full">
+					<table class="schedule">
+						<div class="icons">
+							<h3 class="title">Schedule 1</h3>
+							<i class="ui circular save icon"></i>
+							<i class="ui circular close icon"></i>
+							<h3 class="semester">Fall/3 2014</h3>
+						</div>
+						<thead>
+							<tr>
+								<td>Time</td>
+								<td>Monday</td>
+								<td>Tuesday</td>
+								<td>Wednesday</td>
+								<td>Thursday</td>
+								<td>Friday</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>8:45</td>
+								<td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td>9:00</td>
+								<td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td>9:15</td>
+								<td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td>9:30</td>
+								<td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td>9:45</td>
+								<td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td>10:00</td>
+								<td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td>10:15</td>
+								<td></td><td></td><td></td><td></td><td></td>
+							</tr>
+							<tr>
+								<td>10:30</td>
+								<td></td><td></td><td></td><td></td><td></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="ui divider"></div>
+				</div>
+			</div> 
+
+			<div class="bottom">
+				<div class="row clearfix schedules">
+					<div class="column full">
+					
+					</div>
+				</div>
+			</div>
+
+		</div> <!-- End Container-->
+
+
+
+<!--
+********************
+	PHONE MENU
+********************
+-->
+
+		<div class="ui basic modal">
+			<!-- Back Button -->
+			<div class="ui horizontal icon action divider phone inverted">
+	  			<i class="circular reply mail icon inverted"></i>
+	  		</div>
+
+			<div class="row clearfix phone containing menu">
+				<div class="column full">
+					<!-- White Modal Menu Box -->
+					<div class="ui fluid vertical menu">
+						<div class="item">
+					    	<h2>schedule generator</h2>
+					  	</div>
+
+						<!-- Text Input -->
+					  	<div class="item">
+					    	<div class="ui icon input fluid">
+					      		<input type="text" placeholder="Add a Course...">
+					      		<i class="ui add icon inverted"></i>
+					    	</div>
+					    	<div class="ui course small hidden error attached bottom message"></div>
+					  	</div>
+
+					  	<!-- Generate Button -->
+					  	<div class="item">
+				      		<div class="ui black button">GENERATE</div>
+					  	</div>
+
+					  	<!-- Settings Accordion -->
+						<div class="item ui accordion">
+						    <div class="title">
+						        <i class="ui setting icon"></i>
+						        Settings...
+						    </div>
+
+						    <div class="content">
+								<div>Give me classes for 
+									<div class="ui inline dropdown">
+										<div class="text">Fall/3</div>
+										<i class="dropdown icon"></i>
+										<div class="menu">
+											<div class="item" data-text="Summer/1">Summer/1</div>
+											<div class="item" data-text="Summer/2">Summer/2</div>
+											<div class="item active" data-text="Summer/2">Fall/3</div>
+											<div class="item" data-text="Winter/4">Winter/4</div>
+										</div>
+									</div>
+									semester in
+									<div class="ui inline dropdown">
+										<div class="text">2014</div>
+										<i class="dropdown icon"></i>
+										<div class="menu">
+											<div class="item active" data-text="String(2014)">2014</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Link to Profile Page -->
+					  	<a class="item ui accordion" href="profile.html">
+				      		<div class="title">
+				      			<i class="ui user icon"></i>
+				      			My Profile
+				      		</div>
+					  	</a>
+
+					  	<!-- Link to Log Out -->
+					  	<a class="item ui accordion" href="index.html">
+				      		<div class="title">
+				      			<i class="ui sign out icon"></i>
+				      			Sign Out
+				      		</div>
+					  	</a>
+					  	
+					</div>
+
+				</div>
+			</div>
+
+		</div> <!-- End Phone Menu-->
+
+		<div class="ui vertical pc wide sidebar inverted menu">
+			<div class="item">
+				<h3 class="ui header center">
+					Your Courses
+				</h3>
+				<div class="center fluid">for</div>
+				<div class="center semester">
+					<div class="ui inline dropdown">
+						<div class="text">Summer/1</div>
+					    <i class="dropdown icon"></i>
+					    <div class="menu">
+					        <div class="item active" data-text="Summer/1">Summer/1</div>
+					        <div class="item" data-text="Summer/2">Summer/2</div>
+					        <div class="item" data-text="Fall/3">Fall/3</div>
+					        <div class="item" data-text="Winter/4">Winter/4</div>
+					    </div>
+					</div>
+					<div class="ui inline dropdown">
+						<div class="text">2014</div>
+					    <i class="dropdown icon"></i>
+					    <div class="menu">
+					        <div class="item active" data-text="2014 ">2014</div>
+					        <div class="item" data-text="2015 ">2015</div>
+	 				        <div class="item" data-text="2016 ">2016</div>
+					    </div>
+					</div>
+				</div>
+			</div>
+
+			<div class="item menuInput">
+				<div class="ui small icon fluid input">
+					<input type="text" placeholder="Add a Course..."/>
+					<i class="ui icon add inverted"></i>
+				</div>
+				<div class="ui course small hidden error attached bottom message"></div>
+			</div>
+
+			<div class="item">
+				<div class="ui black button generate">GENERATE</div>
+			</div>
+
+			<!-- Settings Accordion -->
+			<div class="item ui blac inverted accordion">
+			    <div class="title">
+			        <i class="ui setting icon"></i>
+			        Settings...
+			    </div>
+
+			    <div class="content">
+					<div class="center">I want
+						<div class="ui inline dropdown">
+							<div class="text">most time off campus</div>
+							<i class="dropdown icon"></i>
+							<div class="menu">
+								<div class="item active" data-text="most time off campus">most time off campus</div>
+								<div class="item" data-text="most time on campus">most time on campus</div>
+								<div class="item" data-text="most days off">most days off</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Link to Profile Page -->
+		  	<a class="item" href="profile.html">
+	      		<div class="title">
+	      			<i class="ui user icon"></i>
+	      			My Profile
+	      		</div>
+		  	</a>
+
+		  	<!-- Link to Log Out -->
+		  	<a class="item" href="index.html">
+	      		<div class="title">
+	      			<i class="ui sign out icon"></i>
+	      			Sign Out
+	      		</div>
+		  	</a>
+		</div>
+		<div class="dummy" style="visibility:hidden"></div>
 	</body>
 </html>
