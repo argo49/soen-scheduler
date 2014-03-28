@@ -9,7 +9,17 @@ var UserManagement = require("../models/UserManagement.js");
 module.exports.controller = function(app) {
 
 	app.io.route("createUser", function(req) {
-		UserManagement.createUser(req.data);
+		manager = new UserManagement.AccountManager();
+
+		manager.createUser(req.data, function(err, success) {
+			if(err) {
+				req.io.emit("createUser", "Error!");
+				console.log(err);
+			}
+			else
+				req.io.emit("createUser", "Success!");
+		});
+		
 	});
 
 }

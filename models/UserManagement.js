@@ -15,7 +15,7 @@ var USERS_COLLECTION = "argonauts";
 /**
 Account Manager class to allow creation, deletion and validation of Users
 */
-var AccountManager = function() {
+exports.AccountManager = function() {
 
 	/**
 	Create a user in the database
@@ -23,13 +23,13 @@ var AccountManager = function() {
 	this.createUser = function(user, callback) {
 
 		//Look if user already exists first
-		Security.find(USERS_DATABASE, USERS_COLLECTION, {"userId":user.userId}, function(err, results) {
+		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
 			if(err)
 				callback(err);
 				
 			//User exists
 			else if(results.length != 0) {
-				callback("AccountManager.createUser: The user ID " + user.userId + " already exists.");
+				callback("AccountManager.createUser: The email address " + user.emailAddress + " is already in use.");
 			}
 
 			//User does not exist: proceed to creation
@@ -46,13 +46,13 @@ var AccountManager = function() {
 	Removes a user from the database. Should always validate before using this!
 	*/
 	this.deleteUser = function(user, callback) {
-		Security.find(USERS_DATABASE, USERS_COLLECTION, {"userId":user.userId}, function(err, results) {
+		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
 			if(err)
 				callback(err);
 			else if(results.length == 0)
-				callback("There is no user " + user.userId);
+				callback("There is no email address " + user.emailAddress);
 			else {
-				Security.remove(USERS_DATABASE, USERS_COLLECTION, {"userId":user.userId}, function(err, success) {
+				Security.remove(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, success) {
 					if(err)
 						callback(err);
 					else
@@ -66,11 +66,11 @@ var AccountManager = function() {
 	
 	*/
 	this.validateUser = function(user, callback) {
-		Security.find(USERS_DATABASE, USERS_COLLECTION, {"userId":user.userId}, function(err, results) {
+		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
 			if(err)
 				callback(err);
 			else if (results.length == 0)
-				callback("AccountManager.validateUser:The user " + user.userId + " does not exist");
+				callback("AccountManager.validateUser:The user " + user.emailAddress + " does not exist");
 			else
 				callback(err, results[0].password == user.password);
 		});

@@ -20,6 +20,10 @@ app.io.route('SomeEvent', function (req) {
 	req.io.emit('ReceivingStuff', 'Hello');
 });
 
+var UserManagement = require('./controllers/UserManagement.js');
+UserManagement.controller(app);
+
+
 // HTTPS code, not being used because of certificate prices
 /****
 var options = {
