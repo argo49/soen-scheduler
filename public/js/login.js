@@ -1,14 +1,21 @@
 
 
+var socket = io.connect();
 
+var emailValidated;
+var passwordValidated;
 
 $(document).ready(function() {
 	$('.button').on('click', validateFields);
 });
 
 function validateFields() {
-	validateEmail();
-	validatePassword();
+	if(validateEmail() && validatePassword()){
+	
+	socket.emit('createUser', {"emailAddress" : emailValidated, "password" : passwordValidated});
+	socket.on('createUser', function(dataReceived) {console.log(dataReceived)});
+	}
+
 }
 
 function validateEmail() {
@@ -32,6 +39,9 @@ function validateEmail() {
 			errorCont.append($('<li/>').text(lengthErrorStr));	
 		}
 
+		emailValidated = null;
+		return false;
+
 	} else if (!/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email.val())) {
 		// Length of the email is good if we get to this point
 		emailLengthError.remove();
@@ -40,6 +50,9 @@ function validateEmail() {
 		if (!emailFormatError.length) {
 			errorCont.append($('<li/>').text(formatErrorStr));	
 		}
+
+		emailValidated = null;
+		return false;
 	} else {
 
 		// No email error
@@ -52,6 +65,9 @@ function validateEmail() {
 		if (!errorCont.find('li').length) {
 			uiForm.removeClass('error');
 		}
+
+		emailValidated = email.val();
+		return true;
 	}
 }
 
@@ -74,6 +90,9 @@ function validatePassword() {
 			errorCont.append($('<li/>').text(errorStr));	
 		}
 
+		passwordValidated = null;
+		return false;
+
 	} else {
 
 		// No password error
@@ -84,5 +103,8 @@ function validatePassword() {
 		if (!errorCont.find('li').length) {
 			uiForm.removeClass('error');
 		}
+
+		passwordValidated = password.val();
+		return true;
 	}
 }
