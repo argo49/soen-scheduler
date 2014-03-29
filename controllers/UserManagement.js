@@ -14,7 +14,7 @@ module.exports.controller = function(app) {
 	*/
 	app.io.route("createUser", function(req) {
 
-		manager.createUser(req.data, function(err, success) {
+		manager.createUser(req.data, req, function(err, success) {
 			if(err) {
 				req.io.emit("createUserError", err);
 				console.log(err);
@@ -32,7 +32,7 @@ module.exports.controller = function(app) {
 	app.io.route("login", function(req) {
 		
 		//Verify credentials of user
-		manager.validateUser(req.data, function(err, success) {
+		manager.validateUser(req.data, function(err, result) {
 		
 			//If an error occured, send an error
 			if(err) {
@@ -41,13 +41,13 @@ module.exports.controller = function(app) {
 			}
 			
 			//If the credentials are bad, send an error
-			else if(!success) {
+			else if(!result) {
 				req.io.emit("loginError", "Email/Password combination is invalid!");
 			}
 			
 			//If the credentials are good, login the user
 			else {
-				manager.login(req.data, req, function(err, success) {
+				manager.login(result, req, function() {
 					req.io.emit("login", "Logged in user!");
 				});
 			}
@@ -61,7 +61,7 @@ module.exports.controller = function(app) {
 	*/
 	app.io.route("logout", function(req) {
 	
-		manager.logout(req.data, req, function() {
+		manager.logout(req.session.user, req, function() {
 			req.io.emit("logout", "Logged out user!");
 		});
 		
@@ -72,19 +72,19 @@ module.exports.controller = function(app) {
 	*/
 	app.io.route("deleteUser", function(req) {
 	
-		manager.validateUser(req.data, function(err, success) {
+		manager.validateUser(req.data, function(err, result) {
 			if(err) {
 				req.io.emit("deleteUserError", err);
 				console.log(err);
 			}
 			
 			//If the credentials are bad, send an error
-			else if(!success) {
+			else if(!result) {
 				req.io.emit("deleteUserError", "Email/Password combination is invalid!");
 			}
 			
 			else {
-				manager.deleteUser(req.data, function(err, success) {
+				manager.deleteUser(result, req, function(err, success) {
 				
 					if(err) {
 						req.io.emit("deleteUserError", err);
@@ -98,5 +98,11 @@ module.exports.controller = function(app) {
 			}
 		});
 	});
-
+	
+	/**
+	Event to request the user's data
+	*/
+	app.io.route("getSession", function(req) {
+		req.io.emit("getSession", req.session.user);
+	});
 }

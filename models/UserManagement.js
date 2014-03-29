@@ -20,7 +20,7 @@ exports.AccountManager = function() {
 	/**
 	Create a user in the database
 	*/
-	this.createUser = function(user, callback) {
+	this.createUser = function(user, request, callback) {
 
 		//Look if user already exists first
 		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
@@ -36,7 +36,12 @@ exports.AccountManager = function() {
 			else {
 				Security.insert(USERS_DATABASE, USERS_COLLECTION, user, function(err, success) {
 					if(err) callback(err);
-					else callback(err, true);
+					else {
+						request.session.user = user;
+						delete request.session.password;
+						request.session.save();
+						callback(err, true);
+					}
 				});
 			}
 		});
@@ -45,7 +50,7 @@ exports.AccountManager = function() {
 	/**
 	Removes a user from the database. Should always validate before using this!
 	*/
-	this.deleteUser = function(user, callback) {
+	this.deleteUser = function(user, request, callback) {
 		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
 			if(err)
 				callback(err);
@@ -56,14 +61,14 @@ exports.AccountManager = function() {
 					if(err)
 						callback(err);
 					else
-						callback(err, true);
+						request.session.destroy(callback(err, true));
 				});
 			}
 		});
 	}
 
 	/**
-	Verifies a user/password combination
+	Verifies a user/password combination and returns the user that corresponds
 	*/
 	this.validateUser = function(user, callback) {
 		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
@@ -72,7 +77,7 @@ exports.AccountManager = function() {
 			else if (results.length == 0)
 				callback("The user " + user.emailAddress + " does not exist");
 			else
-				callback(err, results[0].password == user.password);
+				callback(err, results[0]);
 		});
 	}
 	
@@ -81,6 +86,8 @@ exports.AccountManager = function() {
 	*/
 	this.login = function(user, request, callback) {
 		request.session.user = user;
+		delete request.session.password;
+		request.session.save();
 		callback();
 	}
 	
