@@ -9,16 +9,45 @@
 		<script type="text/javascript" src="lib/semantic.min.js"></script>
 		<script type="text/javascript" src="js/login.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-
-		
 	</head>
 	<body>
 
 		<div id="fb-root"></div>
 
 		<script type="text/javascript">
-			//Facebook javascript login nonsense
-			function testAPI(){console.log("Welcome!  Fetching your information.... "),FB.api("/me",function(a){console.log("Good to see you, "+a.name+".")})}window.fbAsyncInit=function(){FB.init({appId:"665040556873147",status:!0,cookie:!0,xfbml:!0}),FB.Event.subscribe("auth.authResponseChange",function(a){"connected"===a.status?testAPI():"not_authorized"===a.status?FB.login():FB.login()})},function(a){var b,c="facebook-jssdk",d=a.getElementsByTagName("script")[0];a.getElementById(c)||(b=a.createElement("script"),b.id=c,b.async=!0,b.src="http://connect.facebook.net/en_US/all.js",d.parentNode.insertBefore(b,d))}(document);
+		    window.fbAsyncInit = function() {
+				FB.init({
+					appId      : "665040556873147",
+					status     : true, 
+					cookie     : true, 
+					xfbml      : true 
+				});
+
+				FB.Event.subscribe('auth.authResponseChange', function(response) {
+					if (response.status === 'connected') {
+						testAPI();
+					} else if (response.status === 'not_authorized') {
+						FB.login(function(r){console.log(r)},{scope: 'email'});
+					} else {
+						FB.login(function(r){console.log(r)},{scope: 'email'});
+					}
+				});
+			};
+
+			(function(d){
+				var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+				if (d.getElementById(id)) {return;}
+				js = d.createElement('script'); js.id = id; js.async = true;
+				js.src = "//connect.facebook.net/en_US/all.js";
+				ref.parentNode.insertBefore(js, ref);
+			}(document));
+
+			function testAPI() {
+				FB.api('/me', {fields: 'email'}, function(response) {
+					console.log('Good to see you!', response);
+				});
+			}
+
 		</script>
 
 		<div class="container">
@@ -48,10 +77,10 @@
 					    </div>
 
 					    <div class="column fourth">
-				  			<div class="ui black submit button noBorder">Login</div>
+				  			<div class="ui black submit login button">Login</div>
 					    </div>
 					    <div class="column fourth">
-					    	<div class="ui black submit button noBorder">Signup!</div>
+					    	<div class="ui black submit signup button">Signup!</div>
 					    </div>
 					    <div class="column fourth">
 					    	<h2>or</h2>
@@ -84,5 +113,7 @@
 				</div>
 			</div>
 		</div>
+
+
 	</body>
 </html>

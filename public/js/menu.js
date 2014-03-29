@@ -125,13 +125,18 @@ $(document).ready(function(){
 			phoneMenu.showMenu();
 			mainMenu.toggleMenu();
 		});
-	var s1 = new ScheduleManager();
-	var s2 = new ScheduleManager();
-	var s3 = new ScheduleManager();
-	var s4 = new ScheduleManager();
-	var s5 = new ScheduleManager();
-	var s6 = new ScheduleManager();
+	var s1 = new ScheduleManager({title:'asdasd'});
+	var s2 = new ScheduleManager({title:'asdasd'});
+	var s3 = new ScheduleManager({title:'asdasd'});
+	var s4 = new ScheduleManager({title:'asdasd'});
+	var s5 = new ScheduleManager({title:'asdasd'});
+	var s6 = new ScheduleManager({title:'asdasd'});
 	s1.insert();
+	s2.insert();
+	s3.insert();
+	s4.insert();
+	s5.insert();
+	s6.insert();
 
 
 });
@@ -156,7 +161,7 @@ function Menu (settings) {
 	this.generate  = this.container.find('.generate.button');
 	this.addIcon   = this.container.find('.add.icon');	
 	this.accordion = this.container.find('.accordion');
-	this.dropdown  = this.container.find('.dropdown'); 
+	this.dropdown  = this.container.find('.dropdown');
 
 	// Initializers
 	// Options, show and hide methods should be defined in the callback
@@ -179,8 +184,9 @@ function Menu (settings) {
 		});
 
 		this.generate.on('click', function () {
-			if (!self.noInput()) { 
-				// do smthg
+			if (global.courses.length > 0) { 
+				$('.prompt').fadeOut();
+				// do server smthg
 			}
 		});
 
@@ -374,9 +380,13 @@ function Course(settings) {
 function ScheduleManager(settings) {
 	var self = this;
 
+	this.init = function() {
+		this.container.find('.title').text(this.title);
+	}
+
 	this.insert = function () {
-		var lastSched = $('.container .row.schedule:last');
-		this.container.insertAfter(lastSched);
+		this.init();
+		this.container.insertBefore($('.schedBottom'));
 	}
 
 	this.newScheduleHandle = function () {
@@ -387,11 +397,25 @@ function ScheduleManager(settings) {
 	}
 
 	this.deleteSchedule = function () {
+
 		if (!this.isSaved) {
-			this.container.remove();
+			this.container.fadeOut(400, function () {
+				self.container.remove();
+				if ($('.row.schedule').length == 0) {
+					var prompt = $('.prompt');
+					prompt.fadeIn();
+					prompt.find('h2').text("you haven't selected any courses yet!");
+					prompt.find('p').text('the calendar icon to get started');
+				}
+			});
+			
+			
+
+			
 		} else {
 			if (confirm('Are you sure you want to delete this saved schedule?')) {
-				this.container.remove();
+				this.container.fadeOut(400, this.container.remove);
+
 				// do server things to unsave
 			} else {
 				// do nothing
@@ -408,9 +432,11 @@ function ScheduleManager(settings) {
 	
 	this.id = (settings)? settings.id : getUniqueScheduleId();
 	this.title = (settings)? settings.title : "";
-	this.container = (settings)? $(settings.selector) : this.newScheduleHandle();
+	this.container = generateScheduleHandle().clone(true, true);
 	this.saveIcon = this.container.find('.icon.save');
 	this.closeIcon = this.container.find('.icon.close');
+	this.printIcon = this.container.find('.icon.print');
+	this.downloadIcon = this.container.find('.icon.download');
 	this.isSaved = false;
 
 	this.closeIcon.on('click', function () {
@@ -427,4 +453,72 @@ function getUniqueScheduleId () {
 	var id = global.scheduleIds[global.scheduleIds.length - 1]++;
 	global.scheduleIds.push(id);
 	return id;
+}
+
+
+
+
+
+function generateScheduleHandle () {
+
+	var column = $('<div/>').addClass('column full');
+
+	
+
+	var icons = $('<div/>').addClass('icons')
+		.append($('<h3/>').addClass('title'))
+		.append($('<i/>').addClass('ui circular save icon'))
+		.append($('<i/>').addClass('ui circular download icon'))
+		.append($('<i/>').addClass('ui circular print icon'))
+		.append($('<i/>').addClass('ui circular close icon'))
+		.append($('<h3/>').addClass('semester'));
+
+	column.append(icons);
+
+	var table = $('<table/>')
+		.addClass('schedule')
+		.append($('<thead/>').append(getTableRow(5).find('td').addClass('day')))
+		.append($('<tbody/>'));
+
+	for (var i = 0; i < 50; i ++) {
+		table.find('tbody').append(getTableRow(5));
+	}
+
+	column.append(table);
+
+
+	function getTableRow(days) {
+		var tr = $('<tr/>');
+
+		for (var i = 0; i < days+1; i++) {
+			tr.append($('<td/>'));
+		}
+
+		return tr;
+	}
+
+	column.append($('<div/>').addClass('ui horizontal divider'));
+
+	var row = $('<div/>')
+		.addClass('row clearfix schedule')
+		.append(column);
+	
+	fillTimes(row);
+
+	return row;
+
+}
+
+// quick n dirty
+function fillTimes(scheduleHandle) {
+	var baseTime = 8.75, offset = 0;
+	var trs = scheduleHandle.find('tbody tr');
+	$.each(trs, function (idx, ele) {
+		var td = $(ele).find('td').first();
+		var mins = String(60 * ((baseTime + offset) % 1));
+		if (mins == 0) { mins += "0" } 
+		var time = 
+		td.text("" + Math.floor(baseTime + offset) + ":" + mins);
+		offset += 0.25;
+	});
 }

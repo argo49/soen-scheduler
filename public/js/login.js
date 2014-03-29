@@ -6,16 +6,39 @@ var emailValidated;
 var passwordValidated;
 
 $(document).ready(function() {
-	$('.button').on('click', validateFields);
+
+	// manual login
+	$('.login.button').on('click', function () {
+		if (validateEmail() && validatePassword()) {
+			socket.emit('login', {"emailAddress" : emailValidated, "password" : passwordValidated});	
+			socket.on('login', function(data) {
+				console.log(data);
+				window.location.assign("home.html");
+			});	
+			socket.on('loginError', function(data) {console.log(data)});	
+
+		} else {
+			console.log('not valid credentials!');
+		}
+	});
+	
+	//	signup
+	$('.signup.button').on('click', function () {
+		if(validateEmail() && validatePassword()){
+			socket.emit('createUser', {"emailAddress" : emailValidated, "password" : passwordValidated});
+			socket.on('createUser', function(data) {console.log(data)});
+		} else {
+			console.log('not valid credentials!');
+		}
+	});
+
 });
 
 function validateFields() {
 	if(validateEmail() && validatePassword()){
-	
-	socket.emit('createUser', {"emailAddress" : emailValidated, "password" : passwordValidated});
-	socket.on('createUser', function(dataReceived) {console.log(dataReceived)});
+		socket.emit('createUser', {"emailAddress" : emailValidated, "password" : passwordValidated});
+		socket.on('createUser', function(dataReceived) {console.log(dataReceived)});
 	}
-
 }
 
 function validateEmail() {

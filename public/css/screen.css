@@ -47,9 +47,18 @@ li {
 	padding: 0.2rem 0;
 }
 
+/* for the back icon on the profile page */
 a > i {
 	color: rgba(0, 0, 0, 0.8) !important;
 	text-decoration: none !important;
+}
+
+input {
+	border-radius: 0 !important;
+}
+
+input + i {
+	border-radius: 0 !important;
 }
 
 /*main container that should hold all the elements of the screen on each page*/
@@ -124,13 +133,11 @@ span.attribute, .header {
 	text-align: center;
 }
 
-input {
-	border-radius: 0 !important;
+a > i.close {
+	color : inherit !important;
 }
 
-input + i {
-	border-radius: 0 !important;
-}
+
 
 
 /********************\
@@ -163,7 +170,6 @@ table.schedule td {
 .row.schedule .icons {
 	width: 95%;
 	display: block;
-	margin: auto;
 	margin-bottom: 0.3rem;
 	position: relative;
 }
@@ -171,7 +177,7 @@ table.schedule td {
 .row.schedule .icons h3 {
 	position: absolute;
 	top : 0.3rem;
-	padding-left: 5rem;
+	padding-left: 10rem;
 }
 
 .row.schedule .save.icon:hover {
@@ -179,13 +185,64 @@ table.schedule td {
 }
 
 .row.schedule .close.icon:hover {
-	background-color: #d95c5c;
+	background-color: #F28A8A	;
+}
+
+.row.schedule .print.icon:hover {
+	background-color: #EDE0BB;
+}
+
+.row.schedule .download.icon:hover {
+	background-color: #ACD7FA;
 }
 
 .row.schedule .icons h3.semester {
 	position: absolute;
 	right: 0;
 	top: 0.3rem;
+}
+
+table.schedule .day:nth-child(1):before {
+	content: "time";
+}
+table.schedule .day:nth-child(2):before {
+	content: "mon";
+}
+table.schedule .day:nth-child(3):before {
+	content: "tue";
+}
+table.schedule .day:nth-child(4):before {
+	content: "wed";
+}
+table.schedule .day:nth-child(5):before {
+	content: "thur";
+}
+table.schedule .day:nth-child(6):before {
+	content: "fri";
+}
+
+/* At medium screens, longer text */
+@media (min-width: 40rem) { 
+
+	table.schedule .day:nth-child(1):before {
+		content: "time";
+	}
+	table.schedule .day:nth-child(2):before {
+		content: "monday";
+	}
+	table.schedule .day:nth-child(3):before {
+		content: "tuesday";
+	}
+	table.schedule .day:nth-child(4):before {
+		content: "wednesday";
+	}
+	table.schedule .day:nth-child(5):before {
+		content: "thursday";
+	}
+	table.schedule .day:nth-child(6):before {
+		content: "friday";
+	}
+
 }
 
 /*************************\
@@ -245,14 +302,6 @@ div.attribute {
 
 /* Phone menu styles */
 
-.white.action.phone.divider {
-	position: fixed !important;
-	width: 100%;
-	margin: 0 auto !important;
-	top: 0.5rem !important;
-	z-index: 1000;
-}
-
 .white.action.phone.divider .icon{
 	background-color: #fff;
 	opacity: 1;
@@ -269,7 +318,7 @@ div.attribute {
 
 /* Because divider is fixed, need some spacing */
 .row.phone.menu.buffer {
-	height: 4rem;
+
 }
 
 .row.phone.containing.menu {
@@ -284,7 +333,6 @@ div.attribute {
 .prompt .column{
 	text-align: center;
 	background-color: #eee;
-	margin: 1rem;
 	padding: 1rem 0;
 }
 
@@ -324,6 +372,10 @@ div.attribute {
 
 .icon.hidden { 
 	visibility: hidden;
+}
+
+.saved div.content {
+	padding: 0 !important;
 }
 
 
