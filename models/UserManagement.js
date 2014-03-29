@@ -29,7 +29,7 @@ exports.AccountManager = function() {
 				
 			//User exists
 			else if(results.length != 0) {
-				callback("AccountManager.createUser: The email address " + user.emailAddress + " is already in use.");
+				callback("The email address " + user.emailAddress + " is already in use.");
 			}
 
 			//User does not exist: proceed to creation
@@ -63,17 +63,32 @@ exports.AccountManager = function() {
 	}
 
 	/**
-	
+	Verifies a user/password combination
 	*/
 	this.validateUser = function(user, callback) {
 		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
 			if(err)
 				callback(err);
 			else if (results.length == 0)
-				callback("AccountManager.validateUser:The user " + user.emailAddress + " does not exist");
+				callback("The user " + user.emailAddress + " does not exist");
 			else
 				callback(err, results[0].password == user.password);
 		});
+	}
+	
+	/**
+	Logs in a user by associating their user data with a session. Should always validate before using this!
+	*/
+	this.login = function(user, request, callback) {
+		request.session.user = user;
+		callback();
+	}
+	
+	/**
+	Logs out a user by destroying their session data
+	*/
+	this.logout = function(user, request, callback) {
+		request.session.destroy(callback());
 	}
 	
 };

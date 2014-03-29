@@ -3,10 +3,14 @@ var express = require('express.io'),
 
 var app = express().http().io();
 
+//Loading sessions
+app.use(express.cookieParser());
+app.use(express.session({secret: 'there_is_no_spoon'}));
+
 //Server static content
 app.use(express.static(__dirname + '/'));
 
-//Initial request handeler with session setup for HTTPS
+//Initial request handler with session setup for HTTPS
 app.get('/', function(req, res) {
     res.sendfile(__dirname + '/index.html');
 });
@@ -14,10 +18,6 @@ app.get('/', function(req, res) {
 //Starting of HTTP server
 app.listen(80, function(){
 	console.log('Server started on port 80.');
-});
-
-app.io.route('SomeEvent', function (req) {
-	req.io.emit('ReceivingStuff', 'Hello');
 });
 
 var UserManagement = require('./controllers/UserManagement.js');
