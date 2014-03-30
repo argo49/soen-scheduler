@@ -165,7 +165,6 @@ function Menu (settings) {
 	this.accordion = this.container.find('.accordion');
 	this.dropdown  = this.container.find('.dropdown');
 	this.signout   = this.container.find('.sign.out').closest('.item');
-	console.log(this.signout.length);
 
 	// Initializers
 	// Options, show and hide methods should be defined in the callback
@@ -410,6 +409,12 @@ function ScheduleManager(settings) {
 
 	this.init = function() {
 		this.container.find('.title').text(this.title);
+		var theads = this.container.find('thead td');
+		var words = ["TIME", "MONDAY", "TUESDAY","WEDNESDAY","THRUSDAY","FRIDAY"];
+		$.each(theads, function (idx, ele) {
+			ele.textContent = words[idx];
+		});
+
 	}
 
 	this.insert = function () {
@@ -452,74 +457,39 @@ function ScheduleManager(settings) {
 		this.container.show();
 	}
 
-	// Horrible mess :)
+	this.toPDF = function () {
+		var element = this.container.find('table');
+
+		html2canvas(element, {
+			background: "#FFF",
+		    onrendered: function(canvas) {
+		        // canvas is the final rendered <canvas> element
+				var doc = new jsPDF('p','pt', 'a4', true);
+		        doc.addImage(canvas.toDataURL('image/jpeg'), 'JPG', 50, 50, 500, 750);
+                doc.save('schedule.pdf');
+
+		    }
+		});
+	}
+
+	this.toPNG = function (callback) {
+		var element = this.container.find('table');
+
+		html2canvas(element, {
+			background: "#FFF",
+		    onrendered: function(canvas) {
+		        // canvas is the final rendered <canvas> element
+				canvas.toBlob(function(blob) {
+				    saveAs(blob, "schedule.png");
+				});
+
+		    }
+		});	
+	}
+
 	this.download = function () {
-
-		var doc = new jsPDF('p','pt', 'a4', true);
-        var source = $('table').first().get(0);
-
-		var leftX   = 50;
-		var rightX  = 550;
-		var topY    = 50;
-		var bottomY = 815;
-		var numOfRows = this.container.find('tr').length;
-
-		var cellHeight = 15;
-		var offset = 0;
-        
-        doc.setLineWidth(0.5);
-
-        // blue background header
-        doc.setFillColor(212, 220, 232);
-		doc.rect(leftX, topY, (rightX - leftX), cellHeight, 'F');
-
-        //draw box
-        doc.line(leftX,topY,leftX,bottomY);
-        doc.line(rightX,bottomY,rightX,topY);
-        doc.line(rightX,topY,leftX,topY);
-
-        // Add rows
-        for (var i = 0; i < numOfRows+2; i++) {
-        	doc.line(leftX, topY + offset, rightX, topY + offset);
-        	offset += cellHeight;
-        }
-
-        // Time column
-        doc.line(leftX+50,topY,leftX+50,bottomY);
-
-        //Other columns
-        for (var i = 1; i < 6; i++) {
-        	doc.line(leftX+50+(90*i),topY,leftX+50+(90*i),bottomY);
-        }
-
-        doc.setFont("helvetica");
-        doc.setFontSize(10);
-
-        // Add headers
-        doc.text(leftX+5, topY+cellHeight-3, "TIME");
-        doc.text(leftX+55, topY+cellHeight-3, "MONDAY");
-
-        var textBase = leftX + 55;
-        var textOffset = 90;
-
-        doc.text(leftX+145, topY+cellHeight-3, "TUESDAY");
-        doc.text(leftX+235, topY+cellHeight-3, "WEDNESDAY");
-        doc.text(leftX+325, topY+cellHeight-3, "THURSDAY");
-        doc.text(leftX+415, topY+cellHeight-3, "FRIDAY");
-
-        var baseTime = 8.75, timeOffset = 0;
-        var baseTimeX = leftX + 5, baseTimeY = topY + cellHeight - 3;
-
-		for (var i = 0; i < numOfRows; i++){
-			var mins = String(60 * ((baseTime + timeOffset) % 1));
-			if (mins == 0) { mins += "0" } 
-			var time = Math.floor(baseTime + timeOffset) + ":" + mins;
-			timeOffset += 0.25;
-			baseTimeY += cellHeight;
-			doc.text(baseTimeX, baseTimeY, time);
-		};
-
-        doc.save('schedule.pdf');
+		this.toPNG();
+		//this.toPDF;
 	}
 
 	this.deleteSchedule = function () {
@@ -560,6 +530,7 @@ function ScheduleManager(settings) {
 	this.closeIcon    = this.container.find('.icon.close');
 	this.printIcon    = this.container.find('.icon.print');
 	this.downloadIcon = this.container.find('.icon.download');
+	this.fbIcon       = this.container.find('.icon.facebook');
 	this.isSaved      = false;
 
 	this.closeIcon.on('click', function () {
@@ -592,13 +563,12 @@ function generateScheduleHandle () {
 
 	var column = $('<div/>').addClass('column full');
 
-	
-
 	var icons = $('<div/>').addClass('icons')
 		.append($('<h3/>').addClass('title'))
 		.append($('<i/>').addClass('ui circular save icon'))
 		.append($('<i/>').addClass('ui circular download icon'))
 		.append($('<i/>').addClass('ui circular print icon'))
+		.append($('<i/>').addClass('ui circular facebook icon'))
 		.append($('<i/>').addClass('ui circular close icon'))
 		.append($('<h3/>').addClass('semester'));
 

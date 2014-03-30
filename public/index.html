@@ -44,7 +44,7 @@
 
 			function testAPI() {
 				FB.api('/me', function(response) {
-					console.log('Good to see you,', response);
+					console.log('Good to see you,', response.name);
 					socket.emit('login', {"emailAddress": response.email, "password":null});
 					socket.on('login', function(data) {
 						console.log(data);
@@ -53,7 +53,10 @@
 					socket.on('loginError', function(data) {
 						console.log(data);
 						socket.emit('createUser', {"emailAddress": response.email, "password": null});
-						socket.on('createUser', function(data) {console.log(data)});
+						socket.on('createUser', function(data) {
+							console.log(data);
+							window.location.assign("profile.html");
+						});
 					});	
 				});
 			}
@@ -98,6 +101,12 @@
 					    <div class="column fourth">
 					    	<div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false" data-scope="user_about_me,email"></div>
 					    </div>
+					    <div class="ui inverted dimmer">
+							<div class="ui text loader">
+								Loading
+								<i class="ui loading icon"></i>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

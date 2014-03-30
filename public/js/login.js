@@ -7,15 +7,32 @@ var passwordValidated;
 
 $(document).ready(function() {
 
+
+
 	// manual login
 	$('.login.button').on('click', function () {
 		if (validateEmail() && validatePassword()) {
+			var loading = $('.dimmer');
 			socket.emit('login', {"emailAddress" : emailValidated, "password" : passwordValidated});	
+			loading.dimmer('show');
 			socket.on('login', function(data) {
 				console.log(data);
+				loading.dimmer('hide');
 				window.location.assign("home.html");
 			});	
-			socket.on('loginError', function(data) {console.log(data)});	
+			socket.on('loginError', function(data) {
+				console.log(data);
+				var email     = $('input[type=text]');
+				var uField    = email.closest('.field');
+				var uiForm    = email.closest('.ui.form.segment');
+				var errorCont = uiForm.find('.ui.error.message');
+				uField.add(uiForm).addClass('error');
+				var err = $('<li/>').text("This account has not been registered. Click signup to create an accout!");
+				if (errorCont.find('li:contains("This account has not been registered. Click signup to create an accout!")').length < 1) {
+					errorCont.append(err);
+				}
+				loading.dimmer('hide');
+			});	
 
 		} else {
 			console.log('not valid credentials!');
@@ -25,8 +42,17 @@ $(document).ready(function() {
 	//	signup
 	$('.signup.button').on('click', function () {
 		if(validateEmail() && validatePassword()){
+			// create user
 			socket.emit('createUser', {"emailAddress" : emailValidated, "password" : passwordValidated});
-			socket.on('createUser', function(data) {console.log(data)});
+			socket.on('createUser', function(data) {
+				console.log(data);
+				// upon successful creation login user
+				socket.emit('login', {"emailAddress" : emailValidated, "password" : passwordValidated});	
+				socket.on('login', function(data) {
+					console.log(data);
+					window.location.assign("profile.html");
+				});	
+			});
 		} else {
 			console.log('not valid credentials!');
 		}

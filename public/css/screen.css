@@ -147,7 +147,6 @@ a > i.close {
 table {
 	border-collapse: collapse;
 	width: 95%;
-	display: block;
 	margin: auto;
 	font-size: 0.8em;
 }
@@ -165,6 +164,7 @@ table.schedule thead td {
 
 table.schedule td {
 	border: 2px solid #888 !important;
+	background-color: #fff;
 }
 
 .row.schedule .icons {
@@ -177,7 +177,7 @@ table.schedule td {
 .row.schedule .icons h3 {
 	position: absolute;
 	top : 0.3rem;
-	padding-left: 10rem;
+	padding-left: 12rem;
 }
 
 .row.schedule .save.icon:hover {
@@ -196,53 +196,14 @@ table.schedule td {
 	background-color: #ACD7FA;
 }
 
+.row.schedule .facebook.icon:hover {
+	background-color: #859FD6;
+}
+
 .row.schedule .icons h3.semester {
 	position: absolute;
 	right: 0;
 	top: 0.3rem;
-}
-
-table.schedule .day:nth-child(1):before {
-	content: "time";
-}
-table.schedule .day:nth-child(2):before {
-	content: "mon";
-}
-table.schedule .day:nth-child(3):before {
-	content: "tue";
-}
-table.schedule .day:nth-child(4):before {
-	content: "wed";
-}
-table.schedule .day:nth-child(5):before {
-	content: "thur";
-}
-table.schedule .day:nth-child(6):before {
-	content: "fri";
-}
-
-/* At medium screens, longer text */
-@media (min-width: 40rem) { 
-
-	table.schedule .day:nth-child(1):before {
-		content: "time";
-	}
-	table.schedule .day:nth-child(2):before {
-		content: "monday";
-	}
-	table.schedule .day:nth-child(3):before {
-		content: "tuesday";
-	}
-	table.schedule .day:nth-child(4):before {
-		content: "wednesday";
-	}
-	table.schedule .day:nth-child(5):before {
-		content: "thursday";
-	}
-	table.schedule .day:nth-child(6):before {
-		content: "friday";
-	}
-
 }
 
 /*************************\
