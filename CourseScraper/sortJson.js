@@ -1,7 +1,7 @@
 var fs = require('fs');
 
 // ["FineArts","ArtsAndScience","EngineeringAndComputerScience","JohnMolsonSchoolOfBusiness","SchoolOfExtendedLearning"]
-var department = 'SchoolOfExtendedLearning';
+var department = 'FineArts';
 
 var json = require(department + '.json');
 
@@ -69,9 +69,9 @@ for (course in courseList) {
 				    courseList[course]['Summer Term'] = courseList[course][info].match(/Summer\sTerm\:(.+)/)[1].match(/\d{1,2}\s\w+/g)[0] + '-' + courseList[course][info].match(/Summer\sTerm\:(.+)/)[1].match(/\d{1,2}\s\w+/g)[1];
 				}
 
-				if (/\/\d\s(Lect|Sem|Studio)/.test(str[i]) && !/Canceled/.test(str[i])) {
+				if (/\/\d\s(Lect|Sem|Studio|OnLine|Prac\/Int\/WTerm|UgradNSched|Lab|Conf)/.test(str[i]) && !/(Lect|Sem|Studio|OnLine)\s[A-Z0-9]{1,3}\s\*Canceled\*/.test(str[i])) {
 
-					var sectionCode = str[i].match(/(Lect|Sem|Studio)\s[A-Z0-9]{1,2}/g)[0];
+					var sectionCode = str[i].match(/(Lect|Sem|Studio|OnLine|Prac\/Int\/WTerm|UgradNSched|Lab|Conf)\s[A-Z0-9]{1,2}/g)[0];
 
 					var session = !!str[i].match(/\/[1234]/) ? parseInt(str[i].match(/\/([1234])/)[1]) : 0,
 

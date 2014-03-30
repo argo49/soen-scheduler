@@ -1,3 +1,5 @@
+// The module exports the function
+
 // MongoDB client to connect to the database
 var MongoClient = require('mongodb').MongoClient;
 
@@ -29,6 +31,7 @@ module.exports.getCourses = function (courseList, callback) {
 
 			course = selectedCourses[i];
 
+			// Get each course's entry from the databse via the _id
 			collection.findOne({'_id':course}, function (error, doc) {
 
 				if (error != null) {
