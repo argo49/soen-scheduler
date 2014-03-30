@@ -1,9 +1,18 @@
 var fs = require('fs');
 
 // ["FineArts","ArtsAndScience","EngineeringAndComputerScience","JohnMolsonSchoolOfBusiness","SchoolOfExtendedLearning"]
-var department = 'FineArts';
+var check = /^FineArts$|^ArtsAndScience$|^EngineeringAndComputerScience$|^JohnMolsonSchoolOfBusiness$|^SchoolOfExtendedLearning$/;
 
-var json = require(department + '.json');
+var department = process.argv[2];
+var json = {};
+
+if (!check.test(department)) {
+	console.log('ERROR: The parameter passed is not a valid department name. Please use one of the following:\n\tFineArts\n\tArtsAndScience\n\tEngineeringAndComputerScience\n\tJohnMolsonSchoolOfBusiness\n\tSchoolOfExtendedLearning');
+	process.exit();
+}
+else {
+	json = require(department + '.json');
+}
 
 // The maximum size for a lecture/seminar
 var MAX_LECT = 100;
@@ -137,4 +146,5 @@ function timeToDecimal (time) {
 
 	return Math.round(100 * (hour + minutes)) / 100;
 }
+
 
