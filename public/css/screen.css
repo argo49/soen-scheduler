@@ -378,6 +378,11 @@ div.attribute {
 	padding: 0 !important;
 }
 
+.login, .signup {
+	padding-top: 0.5rem !important;
+	margin-top: 0.5rem !important;
+}
+
 
 body {
 	height: 200%;

@@ -27,9 +27,9 @@
 					if (response.status === 'connected') {
 						testAPI();
 					} else if (response.status === 'not_authorized') {
-						FB.login(function(r){console.log(r)},{scope: 'email'});
+						FB.login(function(r){console.log('r',r)},{scope: 'email'});
 					} else {
-						FB.login(function(r){console.log(r)},{scope: 'email'});
+						FB.login(function(r){console.log('r',r)},{scope: 'email'});
 					}
 				});
 			};
@@ -43,8 +43,18 @@
 			}(document));
 
 			function testAPI() {
-				FB.api('/me', {fields: 'email'}, function(response) {
-					console.log('Good to see you!', response);
+				FB.api('/me', function(response) {
+					console.log('Good to see you,', response);
+					socket.emit('login', {"emailAddress": response.email, "password":null});
+					socket.on('login', function(data) {
+						console.log(data);
+						window.location.assign("home.html");
+					});
+					socket.on('loginError', function(data) {
+						console.log(data);
+						socket.emit('createUser', {"emailAddress": response.email, "password": null});
+						socket.on('createUser', function(data) {console.log(data)});
+					});	
 				});
 			}
 
@@ -86,7 +96,7 @@
 					    	<h2>or</h2>
 					    </div>
 					    <div class="column fourth">
-					    	<div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
+					    	<div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false" data-scope="user_about_me,email"></div>
 					    </div>
 					</div>
 				</div>
