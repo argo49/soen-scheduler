@@ -13,7 +13,8 @@ var global = {
 	],
 	courses: [],
 	phoneMode: false,
-	scheduleIds: [0]
+	scheduleIds: [0],
+	schedules: []
 },
 
 
@@ -389,12 +390,41 @@ function ScheduleManager(settings) {
 		this.container.insertBefore($('.schedBottom'));
 	}
 
+	this.print = function () {
+
+		// Hide all schedules and sidebar
+		$('.sidebar').sidebar('hide');
+		$.each(global.schedules, function (idx, sched) {
+			sched.hide();
+		});
+
+		// show this schedule
+		this.show();
+
+		// Print
+		window.print();
+		
+		// Show all schedules again
+		$.each(global.schedules, function (idx, sched) {
+			sched.show();
+		});
+	}
+
 	this.newScheduleHandle = function () {
 		var schedule = $('.row.schedule:first').clone(true, true);
 		schedule.find('td').removeClass();
 		schedule.find('.semester').add('.title').text("");
 		return schedule;
 	}
+
+	this.hide = function () {
+		this.container.hide();
+	}
+
+	this.show = function () {
+		this.container.show();
+	}
+
 
 	this.deleteSchedule = function () {
 
@@ -424,7 +454,7 @@ function ScheduleManager(settings) {
 		
 	}
 
-	this.saveSchedule = function () {
+	this.save = function () {
 		this.saveIcon.css("background-color", "#C3FFD2");
 		this.isSaved = true;
 		// server things
@@ -444,8 +474,14 @@ function ScheduleManager(settings) {
 	});
 
 	this.saveIcon.on('click', function () {
-		self.saveSchedule();
+		self.save();
 	});
+
+	this.printIcon.on('click', function () {
+		self.print();
+	});
+
+	global.schedules.push(this);
 
 }
 

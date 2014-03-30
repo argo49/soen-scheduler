@@ -508,6 +508,26 @@ body {
 	}
 }
 
+/*****************************\
+|	PRINTING SCREEN STYLES    |
+\*****************************/
+
+@media print {
+	.prompt {
+		display: none;
+	}
+
+	.total {
+		display: none;
+	}
+
+	.divider {
+		display: none;
+	}
+
+}
+
+
 /***************************\
 |	CLEARFIXIN' FOR ROWS 	|
 \***************************/
