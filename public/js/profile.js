@@ -1,6 +1,9 @@
 global = {
 
-}
+};
+
+var socket = io.connect();
+
 
 // Popup for edit button
 $(document).ready(function() {
@@ -42,7 +45,7 @@ $(document).ready(function() {
 				// can happen, but it all gets reset in the end anyway so its not a big deal	
 			}, 1200);
 
-			// Hide the delete course x's
+			// Hide the deleted course x's
 			removeCourseIcon.addClass('hidden');
 
 			addCourse.
@@ -101,6 +104,20 @@ $(document).ready(function() {
 		input.insertBefore(plus.parent());
 
 
+	});
+
+	// Log Out
+	$('.topnav').on('click', function () {
+		socket.emit('logout', function (data) {
+			console.log(data);
+			window.location.assign("index.html");
+		});
+		socket.on('logoutError', function (data) {
+			console.log(data);
+		});
+		FB.logout(function(r){
+			window.location.assign("index.html");
+		});
 	});
 
 	removeCourseIcon.on('click', removeCourse);

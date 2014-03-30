@@ -1,6 +1,8 @@
 /************************\
 |    GLOBAL VARIABLES    |
 \************************/
+var socket = io.connect();
+
 var global = {
 	colors: [
 		'#8e44ad', // purple
@@ -16,7 +18,6 @@ var global = {
 	scheduleIds: [0],
 	schedules: []
 },
-
 
 phoneMenuSettings = {
 	onShow: function () {
@@ -163,6 +164,8 @@ function Menu (settings) {
 	this.addIcon   = this.container.find('.add.icon');	
 	this.accordion = this.container.find('.accordion');
 	this.dropdown  = this.container.find('.dropdown');
+	this.signout   = this.container.find('.sign.out').closest('.item');
+	console.log(this.signout.length);
 
 	// Initializers
 	// Options, show and hide methods should be defined in the callback
@@ -177,16 +180,27 @@ function Menu (settings) {
 				self.addCourse();
 			} 
 		});
-
+		
 		this.addIcon.on('click', function () {
 			if (!self.noInput()) {
 				self.addCourse();				
 			}
 		});
 
+		this.signout.on('click', function () {
+			self.logout();
+		});
+
+
 		this.generate.on('click', function () {
 			if (global.courses.length > 0) { 
+				self.generate.append($('<i/>').addClass('ui loading icon'));
+				$.each(global.schedules, function (idx, sched) {
+					sched.deleteSchedule();
+				});
 				$('.prompt').fadeOut();
+				new ScheduleManager({title:'asdfg', semester:"4"}).insert();
+
 				// do server smthg
 			}
 		});
@@ -201,7 +215,14 @@ function Menu (settings) {
 
 	this.logout = function () {
 		socket.emit('logout', function (data) {
-			console.log();
+			console.log(data);
+			window.location.assign("index.html");
+		});
+		socket.on('logoutError', function (data) {
+			console.log(data);
+		});
+		FB.logout(function(r){
+			window.location.assign("index.html");
 		});
 	}
 
@@ -330,10 +351,10 @@ function Menu (settings) {
 
 	this.noInput = function () {
 		var isEmpty = this.input.val() == "";
-		if (isEmtpty) {
+		if (isEmpty) {
 			this.input.focus();
 		}
-		return isEmtpy;
+		return isEmpty;
 	}
 
 	this.updateCourseList = function () {
@@ -501,37 +522,6 @@ function ScheduleManager(settings) {
         doc.save('schedule.pdf');
 	}
 
-	this.tableToJSON = function () {
-		var table = this.container.find('table')[0];
-	    var data = [];
-
-
-	    // first row needs to be headers
-	    var headers = [];
-	    for (var i=0; i<table.rows[0].cells.length; i++) {
-	        headers[i] = table.rows[0].cells[i].innerHTML.toLowerCase().replace(/ /gi,'');
-	    }
-
-
-	    // go through cells
-	    for (var i=0; i<table.rows.length; i++) {
-
-	        var tableRow = table.rows[i];
-	        var rowData = {};
-
-	        for (var j=0; j<tableRow.cells.length; j++) {
-
-	            rowData[ headers[j] ] = tableRow.cells[j].innerHTML;
-
-	        }
-
-	        data.push(rowData);
-	    }       
-
-	    return data;
-
-	}
-
 	this.deleteSchedule = function () {
 
 		if (!this.isSaved) {
@@ -544,9 +534,6 @@ function ScheduleManager(settings) {
 					prompt.find('p').text('the calendar icon to get started');
 				}
 			});
-			
-			
-
 			
 		} else {
 			if (confirm('Are you sure you want to delete this saved schedule?')) {
@@ -566,14 +553,14 @@ function ScheduleManager(settings) {
 		// server things
 	}
 	
-	this.id = (settings)? settings.id : getUniqueScheduleId();
-	this.title = (settings)? settings.title : "";
-	this.container = generateScheduleHandle().clone(true, true);
-	this.saveIcon = this.container.find('.icon.save');
-	this.closeIcon = this.container.find('.icon.close');
-	this.printIcon = this.container.find('.icon.print');
+	this.id           = (settings)? settings.id : getUniqueScheduleId();
+	this.title        = (settings)? settings.title : "";
+	this.container    = generateScheduleHandle().clone(true, true);
+	this.saveIcon     = this.container.find('.icon.save');
+	this.closeIcon    = this.container.find('.icon.close');
+	this.printIcon    = this.container.find('.icon.print');
 	this.downloadIcon = this.container.find('.icon.download');
-	this.isSaved = false;
+	this.isSaved      = false;
 
 	this.closeIcon.on('click', function () {
 		self.deleteSchedule();
@@ -600,10 +587,6 @@ function getUniqueScheduleId () {
 	global.scheduleIds.push(id);
 	return id;
 }
-
-
-
-
 
 function generateScheduleHandle () {
 
