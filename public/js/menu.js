@@ -199,6 +199,12 @@ function Menu (settings) {
 		}
 	}
 
+	this.logout = function () {
+		socket.emit('logout', function (data) {
+			console.log();
+		});
+	}
+
 	// Should be overridden
 	this.showMenu = function () {}
 
@@ -425,6 +431,106 @@ function ScheduleManager(settings) {
 		this.container.show();
 	}
 
+	// Horrible mess :)
+	this.download = function () {
+
+		var doc = new jsPDF('p','pt', 'a4', true);
+        var source = $('table').first().get(0);
+
+		var leftX   = 50;
+		var rightX  = 550;
+		var topY    = 50;
+		var bottomY = 815;
+		var numOfRows = this.container.find('tr').length;
+
+		var cellHeight = 15;
+		var offset = 0;
+        
+        doc.setLineWidth(0.5);
+
+        // blue background header
+        doc.setFillColor(212, 220, 232);
+		doc.rect(leftX, topY, (rightX - leftX), cellHeight, 'F');
+
+        //draw box
+        doc.line(leftX,topY,leftX,bottomY);
+        doc.line(rightX,bottomY,rightX,topY);
+        doc.line(rightX,topY,leftX,topY);
+
+        // Add rows
+        for (var i = 0; i < numOfRows+2; i++) {
+        	doc.line(leftX, topY + offset, rightX, topY + offset);
+        	offset += cellHeight;
+        }
+
+        // Time column
+        doc.line(leftX+50,topY,leftX+50,bottomY);
+
+        //Other columns
+        for (var i = 1; i < 6; i++) {
+        	doc.line(leftX+50+(90*i),topY,leftX+50+(90*i),bottomY);
+        }
+
+        doc.setFont("helvetica");
+        doc.setFontSize(10);
+
+        // Add headers
+        doc.text(leftX+5, topY+cellHeight-3, "TIME");
+        doc.text(leftX+55, topY+cellHeight-3, "MONDAY");
+
+        var textBase = leftX + 55;
+        var textOffset = 90;
+
+        doc.text(leftX+145, topY+cellHeight-3, "TUESDAY");
+        doc.text(leftX+235, topY+cellHeight-3, "WEDNESDAY");
+        doc.text(leftX+325, topY+cellHeight-3, "THURSDAY");
+        doc.text(leftX+415, topY+cellHeight-3, "FRIDAY");
+
+        var baseTime = 8.75, timeOffset = 0;
+        var baseTimeX = leftX + 5, baseTimeY = topY + cellHeight - 3;
+
+		for (var i = 0; i < numOfRows; i++){
+			var mins = String(60 * ((baseTime + timeOffset) % 1));
+			if (mins == 0) { mins += "0" } 
+			var time = Math.floor(baseTime + timeOffset) + ":" + mins;
+			timeOffset += 0.25;
+			baseTimeY += cellHeight;
+			doc.text(baseTimeX, baseTimeY, time);
+		};
+
+        doc.save('schedule.pdf');
+	}
+
+	this.tableToJSON = function () {
+		var table = this.container.find('table')[0];
+	    var data = [];
+
+
+	    // first row needs to be headers
+	    var headers = [];
+	    for (var i=0; i<table.rows[0].cells.length; i++) {
+	        headers[i] = table.rows[0].cells[i].innerHTML.toLowerCase().replace(/ /gi,'');
+	    }
+
+
+	    // go through cells
+	    for (var i=0; i<table.rows.length; i++) {
+
+	        var tableRow = table.rows[i];
+	        var rowData = {};
+
+	        for (var j=0; j<tableRow.cells.length; j++) {
+
+	            rowData[ headers[j] ] = tableRow.cells[j].innerHTML;
+
+	        }
+
+	        data.push(rowData);
+	    }       
+
+	    return data;
+
+	}
 
 	this.deleteSchedule = function () {
 
@@ -479,6 +585,10 @@ function ScheduleManager(settings) {
 
 	this.printIcon.on('click', function () {
 		self.print();
+	});
+
+	this.downloadIcon.on('click', function () {
+		self.download();
 	});
 
 	global.schedules.push(this);
