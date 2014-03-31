@@ -6,11 +6,7 @@ var emailValidated;
 var passwordValidated;
 
 $(document).ready(function() {
-
-
-
-	// manual login
-	$('.login.button').on('click', function () {
+	function login() {
 		if (validateEmail() && validatePassword()) {
 			var loading = $('.dimmer');
 			socket.emit('login', {"emailAddress" : emailValidated, "password" : passwordValidated});	
@@ -37,7 +33,15 @@ $(document).ready(function() {
 		} else {
 			console.log('not valid credentials!');
 		}
-	});
+	}
+
+	// manual login
+	$('.login.button').on('click', function () {login();})
+					  .on('keydown', function (e) {
+					  	if (e,which() == 13) {
+					  		login();
+					  	}
+					  });
 	
 	//	signup
 	$('.signup.button').on('click', function () {

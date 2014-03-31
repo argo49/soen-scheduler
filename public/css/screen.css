@@ -137,6 +137,10 @@ a > i.close {
 	color : inherit !important;
 }
 
+.row.schedule {
+	padding-top: 2rem;
+}
+
 
 
 
@@ -156,15 +160,21 @@ table.schedule *{
 }
 
 /* Table Header Styles*/
-table.schedule thead td {
+table.schedule tbody tr:first-child td {
 	text-transform: uppercase;
 	font-weight: bold;
-	background-color: hsl(214, 31%, 87%);
+	background-color: hsl(214, 31%, 87%) !important;
 }
 
 table.schedule td {
 	border: 2px solid #888 !important;
 	background-color: #fff;
+}
+
+table.schedule td.course {
+	border: none !important;
+	border-right: 1px solid #888 !important;
+	text-align: center;
 }
 
 .row.schedule .icons {

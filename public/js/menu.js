@@ -1,17 +1,17 @@
 /************************\
 |    GLOBAL VARIABLES    |
 \************************/
-var socket = io.connect();
+//var socket = io.connect();
 
 var global = {
 	colors: [
-		'#8e44ad', // purple
-		'#3498db', // blue
-		'#1abc9c', // turquoise
-		'#2ecc71', // green
-		'#f1c40f', // yellow
-		'#e67e22', // orange
-		'#e74c3c'  // red
+		'#b5c5c5', // grey
+		'#66ccdd', // blue
+		'#77ddbb', // turquoise
+		'#bbe535', // green
+		'#eeee22', // yellow
+		'#ffbb22', // orange
+		'#f56545'  // red
 	],
 	courses: [],
 	phoneMode: false,
@@ -140,6 +140,20 @@ $(document).ready(function(){
 	s5.insert();
 	s6.insert();
 
+	var course1 = {
+		"course" 	: "SOEN 341",
+		"title" 	: "Software Process",
+		"type"		: "lecture",
+		"section"	: "S",
+		"days"		: "M,F",
+		"start"		: 9.25,
+		"end"		: 16.00,
+		"prof"		: "Sutharsan Sivagnanam",
+		"room"		: "H-820",
+		"color"     : getFreeColor()
+	};
+
+	s1.insertCourse(course1);
 
 });
 
@@ -409,17 +423,15 @@ function ScheduleManager(settings) {
 
 	this.init = function() {
 		this.container.find('.title').text(this.title);
-		var theads = this.container.find('thead td');
-		var words = ["TIME", "MONDAY", "TUESDAY","WEDNESDAY","THRUSDAY","FRIDAY"];
-		$.each(theads, function (idx, ele) {
-			ele.textContent = words[idx];
-		});
-
 	}
 
 	this.insert = function () {
 		this.init();
 		this.container.insertBefore($('.schedBottom'));
+	}
+
+	this.insertCourse = function (course) {
+		this.table.Insert(course, course.color);
 	}
 
 	this.print = function () {
@@ -472,7 +484,7 @@ function ScheduleManager(settings) {
 		});
 	}
 
-	this.toPNG = function (callback) {
+	this.toPNG = function (saveIt, callback) {
 		var element = this.container.find('table');
 
 		html2canvas(element, {
@@ -480,16 +492,22 @@ function ScheduleManager(settings) {
 		    onrendered: function(canvas) {
 		        // canvas is the final rendered <canvas> element
 				canvas.toBlob(function(blob) {
-				    saveAs(blob, "schedule.png");
+					if (saveIt) {
+						saveAs(blob, "schedule.png");	
+					}
 				});
-
+				self.image = canvas.toDataURL();
+				if (typeof callback === "function") {
+					callback();
+				}
 		    }
 		});	
 	}
 
 	this.download = function () {
-		this.toPNG();
-		//this.toPDF;
+		this.toPNG(true);
+		//this.toPDF();
+
 	}
 
 	this.deleteSchedule = function () {
@@ -525,13 +543,15 @@ function ScheduleManager(settings) {
 	
 	this.id           = (settings)? settings.id : getUniqueScheduleId();
 	this.title        = (settings)? settings.title : "";
-	this.container    = generateScheduleHandle().clone(true, true);
+	this.table 		  = generateSchedule();
+	this.container    = this.table.handle;
 	this.saveIcon     = this.container.find('.icon.save');
 	this.closeIcon    = this.container.find('.icon.close');
 	this.printIcon    = this.container.find('.icon.print');
 	this.downloadIcon = this.container.find('.icon.download');
 	this.fbIcon       = this.container.find('.icon.facebook');
 	this.isSaved      = false;
+	this.image        = undefined;
 
 	this.closeIcon.on('click', function () {
 		self.deleteSchedule();
@@ -549,6 +569,36 @@ function ScheduleManager(settings) {
 		self.download();
 	});
 
+	// Doesnt work... yet!
+	this.fbIcon.on('click', function () {
+		self.toPNG(false, function() {
+			console.log(self.image);
+
+			var data = self.image;
+  			var encodedPng = data.substring(data.indexOf(',') + 1, data.length);
+  			var decodedPng = Base64Binary.decode(encodedPng);
+
+  			console.log(decodedPng);
+
+			FB.ui({
+				method: 'feed',
+				name: 'Facebook Dialogs',
+				link: 'https://developers.facebook.com/docs/dialogs/',
+				picture: decodedPng,
+				caption: 'Reference Documentation',
+				description: 'Dialogs provide a simple, consistent interface for applications to interface with users.'
+			},
+			function(response) {
+				if (response && response.post_id) {
+					alert('Post was published.');
+				} else {
+					alert('Post was not published.');
+				}
+			});
+
+		});
+	});
+
 	global.schedules.push(this);
 
 }
@@ -559,7 +609,7 @@ function getUniqueScheduleId () {
 	return id;
 }
 
-function generateScheduleHandle () {
+function generateSchedule () {
 
 	var column = $('<div/>').addClass('column full');
 
@@ -573,6 +623,26 @@ function generateScheduleHandle () {
 		.append($('<h3/>').addClass('semester'));
 
 	column.append(icons);
+
+	var row = $('<div/>')
+		.addClass('row clearfix schedule')
+		.append(column);
+
+	var t = new Table(8, 20, 0.25, 5, "M");
+
+	row.append(t.table);
+
+	t.handle = row;
+
+	return t;
+}
+
+
+
+/*
+function generateScheduleHandle () {
+
+
 
 	var table = $('<table/>')
 		.addClass('schedule')
@@ -620,4 +690,4 @@ function fillTimes(scheduleHandle) {
 		td.text("" + Math.floor(baseTime + offset) + ":" + mins);
 		offset += 0.25;
 	});
-}
+}*/
