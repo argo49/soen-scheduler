@@ -71,11 +71,11 @@ exports.AccountManager = function() {
 	Verifies a user/password combination and returns the user that corresponds
 	*/
 	this.validateUser = function(user, callback) {
-		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
+		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress, "password":user.password}, function(err, results) {
 			if(err)
 				callback(err);
 			else if (results.length == 0)
-				callback("The user " + user.emailAddress + " does not exist");
+				callback("The user/password combination for " + user.emailAddress + " is invalid");
 			else
 				callback(err, results[0]);
 		});
