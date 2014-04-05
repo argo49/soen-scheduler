@@ -13,7 +13,7 @@ module.exports.controller = function(app) {
 	*/
 	app.io.route("generateSchedules", function (req) {
 
-		ScheduleGenerator.GenerateSchedule(req.data.Courses, req.data.Session, null, function (error, schedules) {
+		ScheduleGenerator.GenerateSchedules(req.data.Courses, req.data.Session, req.data.Preferences, function (error, schedules) {
 			if (error) {
 				req.io.emit("generateSchedulesError", error);
 				console.log(error);

@@ -13,6 +13,10 @@ app.use(express.session({secret: 'there_is_no_spoon'}));
 var UserManagement = require('./controllers/UserManagement.js');
 UserManagement.controller(app);
 
+// Schedule Generator contains code for creating schedules
+var ScheduleGenerator = require('./controllers/ScheduleManagement.js');
+ScheduleGenerator.controller(app);
+
 /**
 Any page that requires the user logged in will check
 */
@@ -40,6 +44,7 @@ app.listen(80, function(){
 // HTTPS code, not being used because of certificate prices
 /****
 var options = {
+		// These were deleted
        key: fs.readFileSync('key.pem'), 
        cert: fs.readFileSync('key-cert.pem')
    };

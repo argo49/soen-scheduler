@@ -1,18 +1,19 @@
 var receiveCourses = require('getCourses.js');
-var courseSessions = require('../HTMLParsing/node_modules/courseList.json');
+var courseSessions = require('../../HTMLParsing/node_modules/courseList.json');
 
 
 // var preferences = {};
 
-module.exports.GenerateSchedules = function (CourseList, Session, Callback) {
+// Quick export modules
+// TODO add an error catcher in all the functions, try to add preferences
+module.exports.GenerateSchedules = function (CourseList, Session, Preferences, Callback) {
 
 	var schedules = {};
-		removeConflicts(buildSchedules(makeCombinations(arrayToObject(allSectionCombinations, 'Course'), list),arrayToObject(allSectionCombinations, 'Course')));
 
 	if (verifySession(CourseList, Session)) {
 		buildAllSections(CourseList, Session, function (error, sections) {
-			makeCombinations(arrayToObject(sections, 'Course'), list, function (error, combinations) {
-				buildSchedules(combinations, CourseList, function (error, ScheduleList) {
+			makeCombinations(arrayToObject(sections, 'Course'), CourseList, function (error, combinations) {
+				buildSchedules(combinations, arrayToObject(sections, 'Course'), function (error, ScheduleList) {
 					removeConflicts(ScheduleList, function (error, Schedules) {
 						Callback(null, Schedules);
 					});
@@ -366,7 +367,10 @@ function removeConflicts (ScheduleList, callback) {
 			}
 		}
 
-		if (!conflict) goodSchedules.push(ScheduleList[schedule]);
+		if (!conflict) {
+			ScheduleList[schedule].Id = schedule;
+			goodSchedules.push(ScheduleList[schedule]);
+		}
 	}
 
 	console.log('Number of schedule combinations without conflict: ' + goodSchedules.length);
