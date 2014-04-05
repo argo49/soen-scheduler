@@ -104,9 +104,9 @@ for (course in courseList) {
 
 					var j = i + 1;
 
-					while (/(Tut|Lab)\s[A-Z]{1,2}/.test(str[j]) && !/Canceled/.test(str[j])) {
+					while (/(Tut|Lab)\s[0-9A-Z]{1,2}/.test(str[j]) && !/Canceled/.test(str[j])) {
 
-						var tlCode = str[j].match(/(Tut|Lab)\s[A-Z0-9]{1,2}/g)[0];
+						var tlCode = str[j].match(/(Tut|Lab)\s[0-9A-Z]{1,2}/g)[0];
 
 						days = !!str[j].match(/\s[MTWJFSD-]{7}\s/) && !!str[j].match(/\s[MTWJFSD-]{7}\s/)[0].match(/\w/g) ? str[j].match(/\s[MTWJFSD-]{7}\s/)[0].match(/\w/g) : ['unknown'],
 							time = !!str[j].match(/\d{2}\:\d{2}\-\d{2}\:\d{2}/) ? str[j].match(/\d{2}\:\d{2}\-\d{2}\:\d{2}/)[0] : '00:00-00:00',
