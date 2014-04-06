@@ -1,18 +1,32 @@
 /**
 Module to manage accounts
 Classes included: Account Manager
-Imported Modules: User, Security
+Imported Modules: User, Security, Nodemailer (third-party)
 */
+var nodemailer = require("nodemailer");
 
 var User = require("./User.js");
 var Security = require("./Security.js");
 
-//Some variables to define databases and collections that contain users or confirmation codes
+//Some variables
 
 var USERS_DATABASE = "users";
 var USERS_COLLECTION = "argonauts";
 
 var CODES_COLLECTION = "recovery";
+
+var ARGONAUTS_EMAIL = "argonauts341@gmail.com";
+var ARGONAUTS_PASSWORD = "341341341";
+
+//Set up email
+
+var smtpTransport = nodemailer.createTransport("SMTP",{
+    service: "Gmail",
+    auth: {
+        user: ARGONAUTS_EMAIL,
+        pass: ARGONAUTS_PASSWORD
+    }
+});
 
 /**
 Account Manager class to allow creation, deletion and validation of Users
@@ -106,12 +120,12 @@ exports.AccountManager = function() {
 		if(!email)
 			callback("No email is provided for code creation.");
 		else {
-			var newCode = getRandomInt(1000000, 9999999, function(code) {
+			getRandomInt(1000000, 9999999, function(code) {
 				Security.update(USERS_DATABASE, CODES_COLLECTION, {"emailAddress":email}, {"emailAddress":email, "code":code}, {"upsert":true, "safe":true}, function(err, success) {
 					if(err)
 						callback(err);
 					else
-						callback(err, success);
+						callback(err, code);
 				});
 			});
 		}
@@ -166,6 +180,38 @@ exports.AccountManager = function() {
 		
 	}
 	
+};
+
+/**
+Email manager to send messages
+*/
+exports.EmailManager = function() {
+
+	this.sendEmail = function(recipient, subject, message, callback) {
+		if(!recipient || !subject || !message)
+			callback("Missing information to send message.");
+			
+		else {
+	
+			var mailOptions = {
+				from: "Argonauts <users@argonauts.com>", // sender address
+				to: recipient, // list of receivers
+				subject: subject, // Subject line
+				text: message, // plaintext body
+				html: message // html body
+			}
+			
+			smtpTransport.sendMail(mailOptions, function(err, response){
+				if(err) {
+					callback(err);
+				}
+				else {
+					console.log("Message sent: " + response.message);
+					callback(err, true);
+				}
+			});
+		}
+	}
 };
 
 function removePasswordID(user) {

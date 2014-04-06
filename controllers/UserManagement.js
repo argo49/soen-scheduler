@@ -5,8 +5,9 @@ This controller contains all the messaging done for UserManagement.
 var path = require('path');
 var UserManagement = require("../models/UserManagement.js");
 manager = new UserManagement.AccountManager();
+emails = new UserManagement.EmailManager();
 
-//Idea to make controller is from Tim Roberts on his blog
+var ARGONAUTS_URL = "argonauts.tylerargo.com/recovery.html?code=";
 
 module.exports.controller = function(app) {
 
@@ -130,18 +131,29 @@ module.exports.controller = function(app) {
 	
 	app.io.route("recoveryCode", function(req) {
 	
-		manager.createRecoveryCode(req.data, function(err, success) {
+		manager.createRecoveryCode(req.data, function(err, result) {
 			if(err) {
 				req.io.emit("recoveryCodeError", err);
 				console.log(err);
 			}
 			
-			else if(!success) {
+			else if(!result) {
 				req.io.emit("recoveryCodeError", "Failed to generate recovery code!");
 			}
 			
 			else {
-				req.io.emit("recoveryCode", "Successfully created code!");
+				emails.sendEmail(req.data, "Password Recovery for " + req.data, 
+					"Here is your link for password reset: " + ARGONAUTS_URL + result,
+					function(err, success) {
+						if(err) {
+							req.io.emit("recoveryCodeError", err);
+							console.log(err);
+						}
+						else {
+							req.io.emit("recoveryCode", "Successfully sent code!");
+						}
+					}
+				);
 			}
 			
 		});
@@ -149,8 +161,6 @@ module.exports.controller = function(app) {
 	});
 	
 	app.io.route("recoveryPassword", function(req) {
-	
-		console.log("Received event to recover password: " + JSON.stringify(req.data));
 
 		manager.recoverPassword(req.data, function(err, success) {
 			if(err) {
