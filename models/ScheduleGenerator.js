@@ -10,11 +10,25 @@ module.exports.GenerateSchedules = function (CourseList, Session, Preferences, C
 
 	var schedules = {};
 
+	console.log(CourseList);
+	console.log(Session);
+
+	console.log('Inside start of generation function');
+
 	if (verifySession(CourseList, Session)) {
+		console.log('The courses are available in the chosen session');
 		buildAllSections(CourseList, Session, function (error, sections) {
+			if (error) Callback(error, null);
+			console.log('Created the different sections for each course');
 			makeCombinations(arrayToObject(sections, 'Course'), CourseList, function (error, combinations) {
+				if (error) Callback(error, null);
+				console.log('Created the ids for the schedule combinations');
 				buildSchedules(combinations, arrayToObject(sections, 'Course'), function (error, ScheduleList) {
+					if (error) Callback(error, null);
+					console.log('Built the schedules based on the ids');
 					removeConflicts(ScheduleList, function (error, Schedules) {
+						if (error) Callback(error, null);
+						console.log('Removed the schedules with conflicts. Done');
 						Callback(null, Schedules);
 					});
 				});
@@ -22,8 +36,8 @@ module.exports.GenerateSchedules = function (CourseList, Session, Preferences, C
 		});
 	}
 	else {
-		var badCourse = verifySession(CourseList, Session);
-		Callback('The course ' + badCourse + ' is currently not offered in the chosen session.', null);
+		Callback('One of the courses is currently not offered in the chosen session ' + Session + '.', null);
+		return;
 	}
 }
 
@@ -32,17 +46,14 @@ function buildAllSections (courseList, session, callback) {
 
 	var allSectionCombinations = [];
 	var str = '';
-
 	receiveCourses.getCourses(courseList, function (error, results) {
 		if (error != null) {
 			console.error(error);
-			throw error;
+			callback(error, null);
 		}
 
-		
 		// Loop through the returned courses
 		for (var i = 0; i < results.length; i++) {
-
 			for (course in results[i]) {
 				if (course == '_id') continue;
 
@@ -116,6 +127,7 @@ function buildAllSections (courseList, session, callback) {
 				}
 			}
 		};
+		console.log('End of buildAllSections');
 		allSectionCombinations = JSON.parse('[' + str.substring(0, str.length - 1) + ']');
 		callback(null, allSectionCombinations);
 		return;
@@ -216,8 +228,7 @@ function makeCombinations (ScheduleList, list, callback) {
 	// console.log(scheduleIds);
 	console.log('Number of combinations made: ' + scheduleIds.length);
 	callback(null, scheduleIds);
-	return;
-	
+	return;	
 
 }
 
@@ -445,10 +456,15 @@ function arrayToObject (Array, Property) {
 
 function verifySession (Courses, Session) {
 
+	var hasSession = true;
+
+	console.log('Inside verifySession');
 	for (var i = 0; i < Courses.length; i++) {
-		if (courseSessions[Courses[i]].indexOf(Session) == -1) return Courses[i];
+		if (courseSessions[Courses[i]].indexOf(Session) == -1) {
+			hasSession = false;
+		}
+		if (i == Courses.length-1) {
+			return hasSession;
+		}
 	}
-
-	return true;
-
 }
