@@ -7,10 +7,12 @@ Imported Modules: User, Security
 var User = require("./User.js");
 var Security = require("./Security.js");
 
-//Some variables to define databases and collections that contain users
+//Some variables to define databases and collections that contain users or confirmation codes
 
 var USERS_DATABASE = "users";
 var USERS_COLLECTION = "argonauts";
+
+var CODES_COLLECTION = "recovery";
 
 /**
 Account Manager class to allow creation, deletion and validation of Users
@@ -85,8 +87,7 @@ exports.AccountManager = function() {
 	Logs in a user by associating their user data with a session. Should always validate before using this!
 	*/
 	this.login = function(user, request, callback) {
-		request.session.user = user;
-		delete request.session.password;
+		request.session.user = removePasswordID(user);
 		request.session.save();
 		callback();
 	}
@@ -98,4 +99,81 @@ exports.AccountManager = function() {
 		request.session.destroy(callback());
 	}
 	
+	/**
+	Generates a recovery code for a given email address
+	*/
+	this.createRecoveryCode = function(email, callback) {
+		if(!email)
+			callback("No email is provided for code creation.");
+		else {
+			var newCode = getRandomInt(1000000, 9999999, function(code) {
+				Security.update(USERS_DATABASE, CODES_COLLECTION, {"emailAddress":email}, {"emailAddress":email, "code":code}, {"upsert":true, "safe":true}, function(err, success) {
+					if(err)
+						callback(err);
+					else
+						callback(err, success);
+				});
+			});
+		}
+	}
+	
+	/**
+	Verifies if a given code exists in the database
+	*/
+	this.validateCode = function(code, callback) {
+		Security.find(USERS_DATABASE, CODES_COLLECTION, {"code":code}, function(err, results) {
+			if(err)
+				callback(err);
+			else if(results.length == 0)
+				callback("Invalid code " + code);
+			else
+				callback(err, true);
+		});
+	}
+	
+	/**
+	Recovers a user's password by updating it with a new one
+	*/
+	this.recoverPassword = function(credentials, callback) {
+	
+		//Check if the code/email combination is valid
+		Security.find(USERS_DATABASE, CODES_COLLECTION, {"code":parseInt(credentials.code), "emailAddress":credentials.emailAddress}, function(err, results) {
+			//There was an error
+			if(err)
+				callback(err);
+				
+			//The combination does not exist
+			else if(results.length == 0)
+				callback("Invalid code/email combination: " + credentials.code + "/" + credentials.emailAddress);
+				
+			//The combination is valid: update password
+			else {
+				Security.update(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":credentials.emailAddress}, {"password":credentials.password}, {"safe":"true"}, function(err, success) {
+					if(err)
+						callback(err);
+					else {
+						//Remove the code from the codes database
+						Security.remove(USERS_DATABASE, CODES_COLLECTION, {"code":parseInt(credentials.code), "emailAddress":credentials.emailAddress}, function(err, success) {
+							if(err)
+								callback(err);
+							else
+								callback(err, success);
+						});
+					}	
+				});
+			}
+		});
+		
+	}
+	
 };
+
+function removePasswordID(user) {
+	if(user && user.password) delete user.password;
+	if(user && user._id) delete user._id;
+	return user;
+}
+
+function getRandomInt(lower, upper, callback) {
+    callback(Math.floor(lower + (Math.random() * (upper - lower + 1))));
+}

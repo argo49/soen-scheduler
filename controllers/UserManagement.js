@@ -2,6 +2,7 @@
 This controller contains all the messaging done for UserManagement.
 */
 
+var path = require('path');
 var UserManagement = require("../models/UserManagement.js");
 manager = new UserManagement.AccountManager();
 
@@ -104,5 +105,66 @@ module.exports.controller = function(app) {
 	*/
 	app.io.route("getSession", function(req) {
 		req.io.emit("getSession", req.session.user);
+	});
+	
+	/**
+	Access to the recovery page is not allowed (403 error) unless a valid code is provided
+	*/
+	app.get("/recovery.html", function(req, res) {
+		if(req.query.code) {
+			manager.validateCode(parseInt(req.query.code), function(err, success) {
+				if(err) {
+					console.log(err);
+					res.send(403);
+				}
+				else {
+					res.sendfile(path.resolve(__dirname + '/../public/recovery.html'));
+				}
+			});
+		}
+		else {
+			console.log("No code given to access recovery page.");
+			res.send(403);
+		}
+	});
+	
+	app.io.route("recoveryCode", function(req) {
+	
+		manager.createRecoveryCode(req.data, function(err, success) {
+			if(err) {
+				req.io.emit("recoveryCodeError", err);
+				console.log(err);
+			}
+			
+			else if(!success) {
+				req.io.emit("recoveryCodeError", "Failed to generate recovery code!");
+			}
+			
+			else {
+				req.io.emit("recoveryCode", "Successfully created code!");
+			}
+			
+		});
+		
+	});
+	
+	app.io.route("recoveryPassword", function(req) {
+	
+		console.log("Received event to recover password: " + JSON.stringify(req.data));
+
+		manager.recoverPassword(req.data, function(err, success) {
+			if(err) {
+				req.io.emit("recoveryPasswordError", err);
+				console.log(err);
+			}
+			
+			else if(!success) {
+				req.io.emit("recoveryPasswordError", "Failed to update password!");
+			}
+			
+			else {
+				req.io.emit("recoveryPassword", "Successfully updated password!");
+			}
+		});
 	});
 }
