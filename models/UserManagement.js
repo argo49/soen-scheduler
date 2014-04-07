@@ -110,7 +110,36 @@ exports.AccountManager = function() {
 	Logs out a user by destroying their session data
 	*/
 	this.logout = function(user, request, callback) {
-		request.session.destroy(callback());
+		request.session.destroy(function(err) {
+			callback(err);
+		});
+	}
+	
+	/**
+	Updates the user's data/profile and the session data
+	*/
+	this.updateUser = function(user, request, callback) {
+	
+		if(!!user.emailAddress) {
+			callback("Cannot overwrite user's email address");
+		}
+		else {
+			Security.update(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":request.session.emailAddress}, user, {"safe":true}, function(err, success) {
+				if(err)
+					callback(err);
+				else {
+					Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":request.session.emailAddress}, function(err, results) {
+						if(err)
+							callback(err);
+						else {
+							request.session.user = removePasswordID(results[0]);
+							request.session.save();
+							callback(err, true);
+						}
+					});
+				}
+			});
+		}
 	}
 	
 	/**
@@ -187,6 +216,9 @@ Email manager to send messages
 */
 exports.EmailManager = function() {
 
+	/**
+	Send an email
+	*/
 	this.sendEmail = function(recipient, subject, message, callback) {
 		if(!recipient || !subject || !message)
 			callback("Missing information to send message.");

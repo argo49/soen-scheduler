@@ -63,8 +63,11 @@ module.exports.controller = function(app) {
 	*/
 	app.io.route("logout", function(req) {
 	
-		manager.logout(req.session.user, req, function() {
-			req.io.emit("logout", "Logged out user!");
+		manager.logout(req.session.user, req, function(err) {
+			if(err)
+				req.io.emit("logoutError", "Failed to log out user!");
+			else
+				req.io.emit("logout", "Logged out user!");
 		});
 		
 	});
@@ -101,6 +104,20 @@ module.exports.controller = function(app) {
 		});
 	});
 	
+	app.io.route("updateUser", function(req) {
+		
+		manager.updateUser(req.data, req, function(err, success) {
+			if(err) {
+				req.io.emit("updateUserError", err);
+				console.log(err);
+			}
+			else {
+				req.io.emit("updateUser", "Successfully updated user!");
+			}
+		});
+		
+	});
+	
 	/**
 	Event to request the user's data
 	*/
@@ -129,6 +146,9 @@ module.exports.controller = function(app) {
 		}
 	});
 	
+	/**
+	Event to request the creation of a confirmation code
+	*/
 	app.io.route("recoveryCode", function(req) {
 	
 		manager.createRecoveryCode(req.data, function(err, result) {
@@ -160,6 +180,9 @@ module.exports.controller = function(app) {
 		
 	});
 	
+	/**
+	When a user uses the password recovery page
+	*/
 	app.io.route("recoveryPassword", function(req) {
 
 		manager.recoverPassword(req.data, function(err, success) {
