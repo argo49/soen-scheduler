@@ -1,43 +1,63 @@
 var receiveCourses = require('getCourses.js');
 var courseSessions = require('../../HTMLParsing/node_modules/courseList.json');
 
+var TEMP = [[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CE","Days":"T,J","StartTime":16.67,"EndTime":18.33,"Room":"SGW H-400"},"Id":"COMP233.CCCE"},{"Course":"ENCS 282","Lecture":{"Section":"AA","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-535","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AI","Days":"T,J","StartTime":8.5,"EndTime":10.17,"Room":"SGW H-435"},"Id":"ENCS282.AAAI"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CF","Days":"W,F","StartTime":11.25,"EndTime":13,"Room":"SGW H-632"},"Id":"COMP233.CCCF"},{"Course":"ENCS 282","Lecture":{"Section":"AA","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-535","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AI","Days":"T,J","StartTime":8.5,"EndTime":10.17,"Room":"SGW H-435"},"Id":"ENCS282.AAAI"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CE","Days":"T,J","StartTime":16.67,"EndTime":18.33,"Room":"SGW H-400"},"Id":"COMP233.CCCE"},{"Course":"ENCS 282","Lecture":{"Section":"AA","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-535","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AJ","Days":"T,J","StartTime":14,"EndTime":15.67,"Room":"SGW FG-C080"},"Id":"ENCS282.AAAJ"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CF","Days":"W,F","StartTime":11.25,"EndTime":13,"Room":"SGW H-632"},"Id":"COMP233.CCCF"},{"Course":"ENCS 282","Lecture":{"Section":"AA","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-535","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AJ","Days":"T,J","StartTime":14,"EndTime":15.67,"Room":"SGW FG-C080"},"Id":"ENCS282.AAAJ"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CE","Days":"T,J","StartTime":16.67,"EndTime":18.33,"Room":"SGW H-400"},"Id":"COMP233.CCCE"},{"Course":"ENCS 282","Lecture":{"Section":"AA","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-535","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AK","Days":"M,W","StartTime":8.75,"EndTime":10.42,"Room":"SGW H-615"},"Id":"ENCS282.AAAK"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CF","Days":"W,F","StartTime":11.25,"EndTime":13,"Room":"SGW H-632"},"Id":"COMP233.CCCF"},{"Course":"ENCS 282","Lecture":{"Section":"AA","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-535","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AK","Days":"M,W","StartTime":8.75,"EndTime":10.42,"Room":"SGW H-615"},"Id":"ENCS282.AAAK"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CE","Days":"T,J","StartTime":16.67,"EndTime":18.33,"Room":"SGW H-400"},"Id":"COMP233.CCCE"},{"Course":"ENCS 282","Lecture":{"Section":"AB","Days":"T,J","StartTime":10.75,"EndTime":13.25,"Room":"SGW H-937","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AL","Days":"T,J","StartTime":8.75,"EndTime":10.42,"Room":"SGW FG-C070"},"Id":"ENCS282.ABAL"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CF","Days":"W,F","StartTime":11.25,"EndTime":13,"Room":"SGW H-632"},"Id":"COMP233.CCCF"},{"Course":"ENCS 282","Lecture":{"Section":"AB","Days":"T,J","StartTime":10.75,"EndTime":13.25,"Room":"SGW H-937","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AL","Days":"T,J","StartTime":8.75,"EndTime":10.42,"Room":"SGW FG-C070"},"Id":"ENCS282.ABAL"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CE","Days":"T,J","StartTime":16.67,"EndTime":18.33,"Room":"SGW H-400"},"Id":"COMP233.CCCE"},{"Course":"ENCS 282","Lecture":{"Section":"AB","Days":"T,J","StartTime":10.75,"EndTime":13.25,"Room":"SGW H-937","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AM","Days":"T,J","StartTime":14,"EndTime":15.67,"Room":"SGW H-937"},"Id":"ENCS282.ABAM"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CF","Days":"W,F","StartTime":11.25,"EndTime":13,"Room":"SGW H-632"},"Id":"COMP233.CCCF"},{"Course":"ENCS 282","Lecture":{"Section":"AB","Days":"T,J","StartTime":10.75,"EndTime":13.25,"Room":"SGW H-937","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AM","Days":"T,J","StartTime":14,"EndTime":15.67,"Room":"SGW H-937"},"Id":"ENCS282.ABAM"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CE","Days":"T,J","StartTime":16.67,"EndTime":18.33,"Room":"SGW H-400"},"Id":"COMP233.CCCE"},{"Course":"ENCS 282","Lecture":{"Section":"AB","Days":"T,J","StartTime":10.75,"EndTime":13.25,"Room":"SGW H-937","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AN","Days":"M,W","StartTime":8.75,"EndTime":10.42,"Room":"SGW H-529"},"Id":"ENCS282.ABAN"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CF","Days":"W,F","StartTime":11.25,"EndTime":13,"Room":"SGW H-632"},"Id":"COMP233.CCCF"},{"Course":"ENCS 282","Lecture":{"Section":"AB","Days":"T,J","StartTime":10.75,"EndTime":13.25,"Room":"SGW H-937","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"AN","Days":"M,W","StartTime":8.75,"EndTime":10.42,"Room":"SGW H-529"},"Id":"ENCS282.ABAN"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CE","Days":"T,J","StartTime":16.67,"EndTime":18.33,"Room":"SGW H-400"},"Id":"COMP233.CCCE"},{"Course":"ENCS 282","Lecture":{"Section":"CC","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-407","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"CM","Days":"T,J","StartTime":8.5,"EndTime":10.17,"Room":"SGW H-529"},"Id":"ENCS282.CCCM"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CF","Days":"W,F","StartTime":11.25,"EndTime":13,"Room":"SGW H-632"},"Id":"COMP233.CCCF"},{"Course":"ENCS 282","Lecture":{"Section":"CC","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-407","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"CM","Days":"T,J","StartTime":8.5,"EndTime":10.17,"Room":"SGW H-529"},"Id":"ENCS282.CCCM"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CE","Days":"T,J","StartTime":16.67,"EndTime":18.33,"Room":"SGW H-400"},"Id":"COMP233.CCCE"},{"Course":"ENCS 282","Lecture":{"Section":"CC","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-407","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"CN","Days":"T,J","StartTime":14,"EndTime":15.67,"Room":"SGW H-529"},"Id":"ENCS282.CCCN"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CF","Days":"W,F","StartTime":11.25,"EndTime":13,"Room":"SGW H-632"},"Id":"COMP233.CCCF"},{"Course":"ENCS 282","Lecture":{"Section":"CC","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-407","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"CN","Days":"T,J","StartTime":14,"EndTime":15.67,"Room":"SGW H-529"},"Id":"ENCS282.CCCN"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CE","Days":"T,J","StartTime":16.67,"EndTime":18.33,"Room":"SGW H-400"},"Id":"COMP233.CCCE"},{"Course":"ENCS 282","Lecture":{"Section":"CC","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-407","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"CO","Days":"M,W","StartTime":8.75,"EndTime":10.42,"Room":"SGW H-623"},"Id":"ENCS282.CCCO"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}],[{"Course":"COMP 233","Lecture":{"Section":"CC","Days":"T,J","StartTime":13.25,"EndTime":16,"Room":"SGW FG-B080","Professor":"SANTANA, CARLOS-LUIS"},"SummerTerm":{"Term":2,"StartDate":"07 July","EndDate":"19 August"},"Tutorial":{"Section":"CF","Days":"W,F","StartTime":11.25,"EndTime":13,"Room":"SGW H-632"},"Id":"COMP233.CCCF"},{"Course":"ENCS 282","Lecture":{"Section":"CC","Days":"T,J","StartTime":10.25,"EndTime":12.75,"Room":"SGW H-407","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Tutorial":{"Section":"CO","Days":"M,W","StartTime":8.75,"EndTime":10.42,"Room":"SGW H-623"},"Id":"ENCS282.CCCO"},{"Course":"ENGR 202","Lecture":{"Section":"AA","Days":"M,W","StartTime":11.75,"EndTime":13,"Room":"SGW H-435","Professor":"unknown"},"SummerTerm":{"Term":1,"StartDate":"07 May","EndDate":"23 June"},"Id":"ENGR202.AA"}]];
 
-// var preferences = {};
 
 // Quick export modules
 // TODO add an error catcher in all the functions, try to add preferences
 module.exports.GenerateSchedules = function (CourseList, Session, Preferences, Callback) {
 
-	var schedules = {};
-
 	console.log(CourseList);
 	console.log(Session);
+
+	Preferences = 'daysOff';
 
 	console.log('Inside start of generation function');
 
 	if (verifySession(CourseList, Session)) {
+
 		console.log('The courses are available in the chosen session');
+		
 		buildAllSections(CourseList, Session, function (error, sections) {
+		
 			if (error) Callback(error, null);
+		
 			console.log('Created the different sections for each course');
+		
+			// console.log(sections);
 			makeCombinations(arrayToObject(sections, 'Course'), CourseList, function (error, combinations) {
+		
 				if (error) Callback(error, null);
+		
 				console.log('Created the ids for the schedule combinations');
+		
 				buildSchedules(combinations, arrayToObject(sections, 'Course'), function (error, ScheduleList) {
+		
 					if (error) Callback(error, null);
+		
 					console.log('Built the schedules based on the ids');
-					removeConflicts(ScheduleList, function (error, Schedules) {
+		
+					removeConflicts(ScheduleList, Session, function (error, Schedules) {
+		
 						if (error) Callback(error, null);
-						console.log('Removed the schedules with conflicts. Done');
-						Callback(null, Schedules);
+						console.log('Removed the schedules with conflicts.');
+						
+						if (Preferences == 'daysOff') mostDaysOff(Schedules, function (error, ordered) {
+							Callback(null, ordered);
+						});
+		
+						else Callback(null, Schedules);
 					});
 				});
 			});
 		});
 	}
 	else {
-		Callback('One of the courses is currently not offered in the chosen session ' + Session + '.', null);
+		
+		Callback('One or more of the courses is currently not offered in the chosen session or does not exist.', null);
 		return;
+	
 	}
 }
 
@@ -65,6 +85,7 @@ function buildAllSections (courseList, session, callback) {
 
 					if (results[i][course][arrLectures[l]].Session != session) continue;
 
+
 					var arrTutorials = JSON.stringify(results[i][course][arrLectures[l]]).match(/Tut\s[0-9A-Z]+/g) == null ? [] : JSON.stringify(results[i][course][arrLectures[l]]).match(/Tut\s[0-9A-Z]+/g);
 					var arrLabs = JSON.stringify(results[i][course][arrLectures[l]]).match(/Lab\s[0-9A-Z]+/g) == null ? [] : JSON.stringify(results[i][course][arrLectures[l]]).match(/Lab\s[0-9A-Z]+/g);
 
@@ -79,6 +100,26 @@ function buildAllSections (courseList, session, callback) {
 							Professor : results[i][course][arrLectures[l]].Professor
 						}
 					};
+
+					if (results[i][course][arrLectures[l]].Session == 1) {
+						var term = '';
+
+						if (/\d{2}\sMay\-\d{2}\sJune/.test(results[i][course][arrLectures[l]]['Summer Term'])) {
+							term = 1;
+						}
+						else if (/\d{2}\sJuly\-\d{2}\sAugust/.test(results[i][course][arrLectures[l]]['Summer Term'])) {
+							term = 2;
+						}
+						if (/\d{2}\sMay\-\d{2}\sAugust/.test(results[i][course][arrLectures[l]]['Summer Term'])) {
+							term = 'Work Term / Internship';
+						}
+
+						temp.SummerTerm = {
+							Term : term,
+							StartDate : results[i][course][arrLectures[l]]['Summer Term'].split('-')[0],
+							EndDate : results[i][course][arrLectures[l]]['Summer Term'].split('-')[1]
+						};
+					}
 
 					if (arrTutorials.length == 0 && arrLabs.length == 0) {
 						temp.Id = temp.Course.replace(' ', '') + '.' + temp.Lecture.Section;
@@ -272,7 +313,7 @@ function buildSchedules (ScheduleList, Schedule, callback) {
 
 
 // Goes through all the schedules and removes those with conflicts
-function removeConflicts (ScheduleList, callback) {
+function removeConflicts (ScheduleList, Session, callback) {
 
 	var conflict = false;
 	var sharedDays = [];
@@ -286,6 +327,7 @@ function removeConflicts (ScheduleList, callback) {
 		// schedule = COMP232SSA-COMP249SSA-...
 
 		conflict = false;
+		sharedDays = [];
 
 		for(var a = 0; a < ScheduleList[schedule].length; a++) {
 			// ScheduleList[schedule][i] = {Course: 'COMP 232', Lecture: [Object],...}
@@ -301,6 +343,8 @@ function removeConflicts (ScheduleList, callback) {
 				var SectionB = ScheduleList[schedule][b];
 
 				if (SectionB.Lecture == null) continue;
+
+				if (Session == 1 && !summerTerms(SectionA.SummerTerm, SectionB.SummerTerm)) continue;
 
 				tutorialB = (SectionB.Tutorial != null);
 				labB = (SectionB.Lab != null);
@@ -387,7 +431,6 @@ function removeConflicts (ScheduleList, callback) {
 	console.log('Number of schedule combinations without conflict: ' + goodSchedules.length);
 	callback(null, goodSchedules);
 	return;
-
 }
 
 // Creates an Id for the schedule based on the courses and their sections
@@ -406,8 +449,8 @@ function createId (sectionIds) {
 
 function sameDays (schedA, schedB) {
 
-	// console.log('A: '); console.log(schedA);
-	// console.log('B: '); console.log(schedB);
+	// console.log('A:\n' + JSON.stringify(schedA, null, 2));
+	// console.log('B:\n' + JSON.stringify(schedB, null, 2));
 
 	var daysA = schedA.Days.split(',');
 	var daysB = schedB.Days.split(',');
@@ -432,8 +475,35 @@ function sameTime (schedA, schedB) {
 
 		return true;
 	}
+	else if ((schedA.StartTime >= schedB.StartTime && schedA.StartTime <= schedB.EndTime) || (schedA.EndTime >= schedB.StartTime && schedA.EndTime <= schedB.EndTime)) {
 
-	else return false;
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
+function summerTerms (schedA, schedB) {
+
+	// console.log('A:\n' + JSON.stringify(schedA, null, 4));
+	// console.log('B:\n' + JSON.stringify(schedB, null, 4));
+
+	var startA = Number(new Date(schedA.StartDate));
+	var endA = Number(new Date(schedA.EndDate));
+	var startB = Number(new Date(schedB.StartDate));
+	var endB = Number(new Date(schedB.EndDate));
+
+	if ((startA >= startB && startA <= endB) || (endA >= startB && endA <= endB)) {
+		return true;
+	}
+	else if ((startB >= startA && startB <= endA) || (endB >= startA && endB <= endA)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 
 }
 
@@ -460,6 +530,7 @@ function verifySession (Courses, Session) {
 
 	console.log('Inside verifySession');
 	for (var i = 0; i < Courses.length; i++) {
+		if (courseSessions[Courses[i]] == null) continue;
 		if (courseSessions[Courses[i]].indexOf(Session) == -1) {
 			hasSession = false;
 		}
@@ -467,4 +538,53 @@ function verifySession (Courses, Session) {
 			return hasSession;
 		}
 	}
+}
+
+function removeDuplicates (Array) {
+
+	var arr = [];
+
+	for (var i = 0; i < Array.length; i++) {
+		if (arr.indexOf(Array[i]) == -1) arr.push(Array[i]);
+	}
+
+	return arr;
+
+}
+
+function mostDaysOff (Schedules, callback) {
+
+	var days = [];
+	var numDays = [];
+	var ordered = []
+
+	//
+	for (var a = 0; a < Schedules.length; a++) {
+		for (var b = 0; b < Schedules[a].length; b++) {
+			if (Schedules[a][b].Lecture != null) {
+				days.push(Schedules[a][b].Lecture.Days);
+			}
+			if (Schedules[a][b].Tutorial != null) {
+				days.push(Schedules[a][b].Tutorial.Days);
+			}
+			if (Schedules[a][b].Lab != null) {
+				days.push(Schedules[a][b].Lab.Days);
+			}
+		}
+		numDays.push([removeDuplicates(days.join().split(',')).length, Schedules[a].Id]);
+		days = [];
+	}
+
+	numDays = numDays.sort();
+	// console.log(numDays);
+
+	for (var i = 0; i < numDays.length; i++) {
+		for (var a = 0; a < Schedules.length; a++) {
+			if (Schedules[a].Id == numDays[i][1]) {
+				ordered.push(Schedules[a]);
+			}
+		};
+	};
+
+	callback(null, ordered);
 }

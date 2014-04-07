@@ -2,6 +2,7 @@ var fs = require('fs');
 
 // ["FineArts","ArtsAndScience","EngineeringAndComputerScience","JohnMolsonSchoolOfBusiness","SchoolOfExtendedLearning"]
 var check = /^FineArts$|^ArtsAndScience$|^EngineeringAndComputerScience$|^JohnMolsonSchoolOfBusiness$|^SchoolOfExtendedLearning$/;
+var summerTerm = '';
 
 var department = process.argv[2];
 var json = {};
@@ -74,15 +75,15 @@ for (course in courseList) {
 				    courseList[course]['Special Note'] = courseList[course][info].match(/Special\sNote\:(.+)/)[1].trim();
 				}
 
-				if (/Summer\sTerm/.test(courseList[course][info])){
-				    courseList[course]['Summer Term'] = courseList[course][info].match(/Summer\sTerm\:(.+)/)[1].match(/\d{1,2}\s\w+/g)[0] + '-' + courseList[course][info].match(/Summer\sTerm\:(.+)/)[1].match(/\d{1,2}\s\w+/g)[1];
+				if (/Summer\sTerm/.test(str[i])) {
+					summerTerm = str[i].match(/\d{2}\s(May|June|July|August)/g)[0] + '-' + str[i].match(/\d{2}\s(May|June|July|August)/g)[1];
 				}
 
 				if (/\/\d\s(Lect|Sem|Studio|OnLine|Prac\/Int\/WTerm|UgradNSched|Lab|Conf)/.test(str[i]) && !/(Lect|Sem|Studio|OnLine|Prac\/Int\/WTerm|UgradNSched|Lab|Conf)\s[A-Z0-9]{1,3}\s\*Canceled\*/.test(str[i])) {
 
 					var sectionCode = str[i].match(/(Lect|Sem|Studio|OnLine|Prac\/Int\/WTerm|UgradNSched|Lab|Conf)\s[A-Z0-9]{1,2}/g)[0];
 
-					var session = !!str[i].match(/\/[1234]/) ? parseInt(str[i].match(/\/([1234])/)[1]) : 0,
+					var session = !!str[i].match(/\/(1|2|3|4)/) ? parseInt(str[i].match(/\/(1|2|3|4)/)[1]) : 0,
 
 						days = !!str[i].match(/\s[MTWJFSD-]{7}\s/) && !!str[i].match(/\s[MTWJFSD-]{7}\s/)[0].match(/\w/g) ? str[i].match(/\s[MTWJFSD-]{7}\s/)[0].match(/\w/g) : ['unknown'], 
 						time = !!str[i].match(/\d{2}\:\d{2}\-\d{2}\:\d{2}/) ? str[i].match(/\d{2}\:\d{2}\-\d{2}\:\d{2}/)[0] : '00:00-00:00',
@@ -91,6 +92,7 @@ for (course in courseList) {
 						room = !!str[i].match(/(SGW|LOY)\s\w+\-[0-9A-Z\.]+/) ? str[i].match(/(SGW|LOY)\s\w+\-[0-9A-Z\.]+/)[0] : 'unknown',
 						professor = !!str[i].match(/[A-Z-\s]+\,[A-Z-\s]+$/) ? str[i].match(/[A-Z-\s]+\,[A-Z-\s]+$/)[0] : 'unknown';
 
+					
 					courseList[course][sectionCode] = {
 						'Session': session,
 						'Days': days.join(),
@@ -101,6 +103,10 @@ for (course in courseList) {
 						'Size': MAX_LECT,
 						'NbStudents': Math.floor(Math.random() * MAX_LECT)
 					};
+
+					if (session == 1) {
+						courseList[course][sectionCode]['Summer Term'] = summerTerm;
+					}
 
 					var j = i + 1;
 
