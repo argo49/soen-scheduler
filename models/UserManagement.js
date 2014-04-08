@@ -120,20 +120,22 @@ exports.AccountManager = function() {
 	*/
 	this.updateUser = function(user, request, callback) {
 	
-		if(!!user.emailAddress) {
+		if(user.emailAddress) {
 			callback("Cannot overwrite user's email address");
 		}
 		else {
-			Security.update(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":request.session.emailAddress}, user, {"safe":true}, function(err, success) {
+			Security.update(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":request.session.user.emailAddress}, user, {"safe":true}, function(err, success) {
 				if(err)
 					callback(err);
 				else {
-					Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":request.session.emailAddress}, function(err, results) {
+					Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":request.session.user.emailAddress}, function(err, results) {
 						if(err)
 							callback(err);
 						else {
+							console.log(results);
 							request.session.user = removePasswordID(results[0]);
 							request.session.save();
+							console.log(request.session);
 							callback(err, true);
 						}
 					});
