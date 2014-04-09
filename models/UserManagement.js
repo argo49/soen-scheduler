@@ -18,6 +18,8 @@ var CODES_COLLECTION = "recovery";
 var ARGONAUTS_EMAIL = "argonauts341@gmail.com";
 var ARGONAUTS_PASSWORD = "341341341";
 
+var bcrypt = require("bcrypt");
+
 //Set up email
 
 var smtpTransport = nodemailer.createTransport("SMTP",{
@@ -50,6 +52,7 @@ exports.AccountManager = function() {
 
 			//User does not exist: proceed to creation
 			else {
+				user.password = bcrypt.hashSync(user.password, 10);
 				Security.insert(USERS_DATABASE, USERS_COLLECTION, user, function(err, success) {
 					if(err) callback(err);
 					else {
@@ -87,10 +90,10 @@ exports.AccountManager = function() {
 	Verifies a user/password combination and returns the user that corresponds
 	*/
 	this.validateUser = function(user, callback) {
-		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress, "password":user.password}, function(err, results) {
+		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
 			if(err)
 				callback(err);
-			else if (results.length == 0)
+			else if (results.length == 0 || !(bcrypt.compareSync(user.password, results[0].password)))
 				callback("The user/password combination for " + user.emailAddress + " is invalid");
 			else
 				callback(err, results[0]);
@@ -124,6 +127,7 @@ exports.AccountManager = function() {
 			callback("Cannot overwrite user's email address");
 		}
 		else {
+			if(user.password) user.password = bcrypt.hashSync(user.password, 10);
 			Security.update(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":request.session.user.emailAddress}, user, {"safe":true}, function(err, success) {
 				if(err)
 					callback(err);
@@ -193,6 +197,7 @@ exports.AccountManager = function() {
 				
 			//The combination is valid: update password
 			else {
+				credentials.password = bcrypt.hashSync(credentials.password, 10);
 				Security.update(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":credentials.emailAddress}, {"password":credentials.password}, {"safe":"true"}, function(err, success) {
 					if(err)
 						callback(err);
