@@ -52,7 +52,7 @@ exports.AccountManager = function() {
 
 			//User does not exist: proceed to creation
 			else {
-				user.password = bcrypt.hashSync(user.password, 10);
+				if (user.password != null) user.password = bcrypt.hashSync(user.password, 10);
 				Security.insert(USERS_DATABASE, USERS_COLLECTION, user, function(err, success) {
 					if(err) callback(err);
 					else {
@@ -93,9 +93,13 @@ exports.AccountManager = function() {
 		Security.find(USERS_DATABASE, USERS_COLLECTION, {"emailAddress":user.emailAddress}, function(err, results) {
 			if(err)
 				callback(err);
-			else if (results.length == 0 || !(bcrypt.compareSync(user.password, results[0].password)))
-				callback("The user/password combination for " + user.emailAddress + " is invalid");
-			else
+			else if (user.password != null) {
+				if (results.length == 0 || !(bcrypt.compareSync(user.password, results[0].password)))
+					callback("The user/password combination for " + user.emailAddress + " is invalid");
+				else 
+					callback(err, results[0]);
+			}
+			else if (user.password == null)
 				callback(err, results[0]);
 		});
 	}
