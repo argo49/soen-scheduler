@@ -42,12 +42,26 @@ module.exports.GenerateSchedules = function (CourseList, Session, Preferences, C
 		
 						if (error) Callback(error, null);
 						console.log('Removed the schedules with conflicts.');
-						
-						if (Preferences == 'daysOff') mostDaysOff(Schedules, function (error, ordered) {
-							Callback(null, ordered);
+
+						mergeSimilar(Schedules, function (error, minSchedules) {
+
+							if (error) Callback(error, null);
+
+							console.log('Removed redundant schedules. ' + minSchedules.length + ' remain.');
+
+							addSectionNames(minSchedules, function (error, finalSchedules) {
+
+								if (error) Callback(error, null);
+
+								if (Preferences == 'daysOff') mostDaysOff(finalSchedules, function (error, ordered) {
+									Callback(null, ordered);
+								});
+				
+								else Callback(null, finalSchedules);
+							});
+							
 						});
-		
-						else Callback(null, Schedules);
+						
 					});
 				});
 			});
@@ -122,7 +136,7 @@ function buildAllSections (courseList, session, callback) {
 					}
 
 					if (arrTutorials.length == 0 && arrLabs.length == 0) {
-						temp.Id = temp.Course.replace(' ', '') + '.' + temp.Lecture.Section;
+						temp.Id = temp.Course.replace(' ', '') + '_' + temp.Lecture.Section;
 						str += JSON.stringify(temp, null, 4) + ',';
 					}
 
@@ -147,7 +161,7 @@ function buildAllSections (courseList, session, callback) {
 						}
 
 						if (arrLabs.length == 0) {
-							temp.Id = temp.Course.replace(' ', '') + '.' + temp.Lecture.Section + temp[property].Section;
+							temp.Id = temp.Course.replace(' ', '') + '_' + temp.Lecture.Section + '.' +temp[property].Section;
 							str += JSON.stringify(temp, null, 4) + ',';
 						}
 
@@ -159,7 +173,7 @@ function buildAllSections (courseList, session, callback) {
 								EndTime : results[i][course][arrLectures[l]][arrLabs[b]]['End Time'],
 								Room : results[i][course][arrLectures[l]][arrLabs[b]].Room
 							}
-							temp.Id = temp.Course.replace(' ', '') + '.' +temp.Lecture.Section + temp.Tutorial.Section + temp.Lab.Section;
+							temp.Id = temp.Course.replace(' ', '') + '_' +temp.Lecture.Section + '.' +temp.Tutorial.Section + '.' +temp.Lab.Section;
 							str += JSON.stringify(temp, null, 4) + ',';
 						};
 					}
@@ -290,7 +304,7 @@ function buildSchedules (ScheduleList, Schedule, callback) {
 		// Loop through the course section of the combination
 		for (var s = 0; s < ScheduleList[m].length; s++) {
 
-			var courseCode = ScheduleList[m][s].match(/.+\./)[0].replace('.','');
+			var courseCode = ScheduleList[m][s].match(/.+_/)[0].replace('_','');
 			courseCode = courseCode.substring(0,4) + ' ' + courseCode.substring(4,courseCode.length);
 			// console.log(courseCode);
 
@@ -443,7 +457,7 @@ function createId (sectionIds) {
 		else scheduleID += '-' + sectionIds[i];
 	}
 
-	return scheduleID.replace(/\./g, '');
+	return scheduleID;
 
 }
 
@@ -587,4 +601,87 @@ function mostDaysOff (Schedules, callback) {
 	};
 
 	callback(null, ordered);
+}
+
+function mergeSimilar (Schedules, callback) {
+
+	var mergedSched = [];
+
+	for (var a = 0; a < Schedules.length; a++) {
+		if (Schedules[a].Id == null) continue;
+		for (var b = a+1; b <  Schedules.length; b++) {
+			if (Schedules[b].Id == null) continue;
+			if (similarSchedule(Schedules[a], Schedules[b])) {
+				Schedules[a].Id += '||' + Schedules[b].Id;
+				Schedules[b].Id = null;
+			}
+		}
+		mergedSched.push(Schedules[a]);
+	}
+
+	callback(null, mergedSched);
+}
+
+function similarSchedule (schedA, schedB) {
+
+	for (var a = 0; a < schedA.length; a++) {
+
+		var tutA = (schedA[a].Tutorial != null);
+		var labA = (schedA[a].Lab != null);
+
+		// check the lectures
+		if (schedA[a].Lecture.Days != schedB[a].Lecture.Days) return false;
+		else { // check the times if days are the same
+			if (schedA[a].Lecture.StartTime != schedB[a].Lecture.StartTime || schedA[a].Lecture.EndTime != schedB[a].Lecture.EndTime) return false;
+		}
+		// If one has a tutorial and the other doesn't
+		if (tutA) {
+			if (schedA[a].Tutorial.Days != schedB[a].Tutorial.Days) return false;
+			else {
+				if (schedA[a].Tutorial.StartTime != schedB[a].Tutorial.StartTime || schedA[a].Tutorial.EndTime != schedB[a].Tutorial.EndTime) return false;
+			}
+		}
+		// If one has a lab and the other doesn't
+		if (labA) {
+			if (schedA[a].Lab.Days != schedB[a].Lab.Days) return false;
+			else {
+				if (schedA[a].Lab.StartTime != schedB[a].Lab.StartTime || schedA[a].Lab.EndTime != schedB[a].Lab.EndTime) return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+function addSectionNames (data, callback) {
+
+	for (var a = 0; a < data.length; a++) {
+		// split the Ids for each schedule
+		var similarIds = data[a].Id.split('||');
+
+		// Loop through those Ids
+		for (var b = 0; b < similarIds.length; b++) {
+			// split the Ids by course
+			var courses = similarIds[b].split('-');
+
+			// Loop through the courses of the schedules
+			for (var c = 0; c < data[a].length; c++) {
+				// Loop thourght the courses of the id
+				for (var d = 0; d < courses.length; d++) {
+
+					var code = courses[d].split('_')[0];
+					var sections = courses[d].split('_')[1];
+
+					if (data[a][c].Course.replace(' ', '') == code) {
+						if (data[a][c].Lecture.Section.indexOf(sections.split('.')[0]) == -1) data[a][c].Lecture.Section += ', ' + sections.split('.')[0];
+						if (data[a][c].Tutorial != null && data[a][c].Tutorial.Section.indexOf(sections.split('.')[1]) == -1) data[a][c].Tutorial.Section += ', ' + sections.split('.')[1];
+						if (data[a][c].Lab != null && data[a][c].Lab.Section.indexOf(sections.split('.')[2]) == -1) data[a][c].Lab.Section += ', ' + section.split('.')[2];
+					}
+				}
+			}
+		}
+	}
+
+	callback(null, data);
+
 }
