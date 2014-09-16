@@ -19,6 +19,6 @@ Team Members
 - Kristina Lachova (Back End Implementation) @klachov
 - Corey Lee (Back End Implementation) @coolhatharry
 - Gaston Matos (Tester) @GastonMatos
-- Chantale Robillard (Documentation Specialist, Team Leader) @BloZ-C
+- Chantale Robillard (Documentation Specialist, Team Leader) @c-robi
 - Mathieu St-Louis (Front End Implementation) @niofire
 - Mather Warsame (Tester) @MWarsame
